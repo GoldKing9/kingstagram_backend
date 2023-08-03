@@ -8,7 +8,7 @@ class KingstagramApplicationTests {
 
     @Test
     void contextLoads() {
-
+        System.out.println();
     }
 
 }
