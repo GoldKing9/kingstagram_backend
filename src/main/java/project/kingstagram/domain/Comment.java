@@ -15,4 +15,6 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "postId")
     private Post post;
+
+    // 사용자 객체도 있어야함
 }

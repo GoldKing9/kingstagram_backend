@@ -6,4 +6,5 @@ import project.kingstagram.domain.Post;
 
 public interface PostRespository extends JpaRepository<Post, Long> {
 
+
 }

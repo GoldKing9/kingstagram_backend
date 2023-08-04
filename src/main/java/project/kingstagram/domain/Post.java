@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)//무분별한 객체생성에 대해 한번더 체크
 public class Post {
 
     @Id @GeneratedValue
@@ -29,6 +29,12 @@ public class Post {
         this.postTime = LocalDateTime.now();
         this.imageUrl = imageUrl;
         this.user = user;
+    }
+
+
+    public void update(String postContent){
+        this.postContent = postContent;
+        this.postTime = LocalDateTime.now();
     }
 
     @Override

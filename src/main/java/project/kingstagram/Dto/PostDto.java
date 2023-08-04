@@ -1,7 +1,6 @@
 package project.kingstagram.Dto;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 import project.kingstagram.domain.Post;
 
 @Getter
@@ -21,6 +20,5 @@ public class PostDto {
                 .imageUrl(this.imageUrl)
                 .build();
     }
-
 
 }
