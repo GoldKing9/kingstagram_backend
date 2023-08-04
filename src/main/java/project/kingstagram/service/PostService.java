@@ -32,7 +32,6 @@ public class PostService{
         //조건절에 postId와 같은데이타의 postContent를 수정
         Post post = postRespository.findById(postId).orElseThrow();
         post.update(postContent);
-        postRespository.save(post);
 
     }
 }
