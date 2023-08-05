@@ -11,6 +11,6 @@ public interface SessionService {
 
     public Long getUserId(String uuid); //세션 조회 (해시맵에서 uuid로 userId 조회)
 
-    public Long InsertUuid(String uuid, Long userId); //로그인
-    public Long deleteUuid(String uuid); //로그아웃
+    public String InsertUuid(Long userId) throws RuntimeException; //로그인 (uuid 생성)
+    public Long deleteUuid(String uuid); //로그아웃 (uuid 삭제)
 }

@@ -71,6 +71,7 @@ public class UserProfileController {
         input.setUserId(userId);
         input.setUserDescription(userDescription);
         userService.setUserProfile(input);
+
         output.setResponseCode(1);
         return output;
     }
