@@ -95,7 +95,13 @@ public class UserController {
             output.setResponseMessage("비밀번호는 8자 이상 16자 이하로, 띄어쓰기 없이, 영어대문자, 소문자, 특수기호가 포함되도록 작성해주세요");
             return output;
         }
-
+        // 로그인 실패
+        Long loginStatus = userService.login(user.getUserEmail(),user.getUserPw());
+        if(loginStatus == -1){
+            output.setResponseCode(-1);
+            output.setResponseMessage("아이디 또는 비번이 잘못됨");
+            return output;
+        }
         // 로그인 성공한 유저 uuid 생성하고 딕셔너리에 저장 후 uuid와 1 리턴, 로그인 실패하면 -1 리턴
         String uuid = null;
         try {
@@ -117,7 +123,12 @@ public class UserController {
     public UserLogInOutDTO logout(@PathVariable String uuid) {
 
         UserLogInOutDTO output = new UserLogInOutDTO();
+
         Long res = sessionService.deleteUuid(uuid);
+        if (res == null) {
+            output.setResponseCode(-1);
+            return output;
+        }
         output.setResponseCode(1);
         return output;
     }

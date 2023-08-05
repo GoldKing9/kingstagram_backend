@@ -2,6 +2,7 @@ package project.kingstagram.service;
 
 import org.springframework.stereotype.Service;
 import project.kingstagram.Dto.UserDTO;
+import project.kingstagram.Dto.UserLogInOutDTO;
 import project.kingstagram.Dto.UserProfileDTO;
 import project.kingstagram.Dto.UserSignUpDTO;
 
@@ -13,4 +14,5 @@ public interface UserService {
 
     public UserSignUpDTO setUser(UserDTO user); // 회원가입
 
+    public Long login(String userEmail, String userPw); // DB에서 이메일, 비번 조회해서 유효한 로그인인지 검증
 }
