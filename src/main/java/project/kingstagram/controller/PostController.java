@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import project.kingstagram.Dto.*;
+import project.kingstagram.dto.*;
+import project.kingstagram.dto.postGet.PostAllDto;
+import project.kingstagram.dto.postGet.PostOneDto;
 import project.kingstagram.service.PostService;
 
 
@@ -53,7 +55,7 @@ public class PostController {
 
         //게시글 삭제
         postService.deletePost(postId);
-        return "redirect:/api/feeds";
+        return "redirect:/api/feeds"; // 리다이렉트 사용 보류 - 코치님께 여쭤보기!, 결과 하록님께도 전달
     }
 
     @PutMapping("/api/feed")
@@ -75,6 +77,16 @@ public class PostController {
         return "update";
     }
 
+    //단건 조회
+    @GetMapping("/api/feed/{postId}")
+    public PostAllDto getPost(@PathVariable Long postId){
+        return postService.getSinglePost(postId);
+    }
 
+    // 여러건 조회
+//    @GetMapping("/api/feeds")
+//    public String getPostAll(){
+//
+//    }
 
 }

@@ -1,47 +1,53 @@
 package project.kingstagram.service;
 
-import org.apache.catalina.User;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.kingstagram.Dto.PostDto;
+import org.springframework.test.annotation.Rollback;
+import project.kingstagram.dto.PostDto;
+import project.kingstagram.domain.Comment;
 import project.kingstagram.domain.Post;
-import project.kingstagram.domain.Users;
-import project.kingstagram.repository.PostRespository;
+import project.kingstagram.repository.CommentRepository;
+import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
+@Transactional
 class PostServiceTest {
 
     @Autowired
-    PostService service;
+    PostService postService;
     @Autowired
-    PostRespository repository;
+    PostRepository postRepository;
     @Autowired
     UsersRepository usersRepository;
+    @Autowired
+    CommentRepository commentRepository;
 
     @BeforeEach
     void before(){
-        repository.deleteAll();
+        postRepository.deleteAll();
 
         PostDto dto = new PostDto();
         dto.setImageUrl("/Users/file/file-store");
         dto.setPostContent("테스트용 데이터1");
-        service.savePost(dto);
-    }
+        postService.savePost(dto);
 
+        Post post = Post.builder().build();
+        postRepository.save(post);
+
+        Comment comment = Comment.builder().commentContent("이제돼").build();
+        commentRepository.save(comment);
+
+        comment.add(post); //fk관계에 있어서는 연관관계 편의메서드를 사용해야한다!!
+    }
 
     @Test
     @DisplayName("게시글 등록")
@@ -50,19 +56,20 @@ class PostServiceTest {
         PostDto dto = new PostDto();
         dto.setPostContent("aaa");
         dto.setImageUrl("path/aaa/asg");
-        Long postId = service.savePost(dto);
+        Long postId = postService.savePost(dto);
 
-        Post post = repository.findById(postId).get();
+        Post post = postRepository.findById(postId).get();
         assertThat(post.getPostContent()).isEqualTo("aaa");
 
     }
+//modifying , transactional - delete시 붙여야됨! -> jpa가 가지고있는 메소드 말고 커스텀할때 사용해야함!
     @Test
     @DisplayName("게시글 삭제")
+    @Rollback(false)
     void deletePost(){
-
-        long cnt = repository.count();
-        service.deletePost(1L);
-        assertThat(repository.count()).isEqualTo(cnt-1);
+        long cnt = postRepository.count();
+        postService.deletePost(2L);
+        assertThat(postRepository.count()).isEqualTo(cnt-1);
 
         //문제 : 테스트마다 id값이 바뀌어서 테스트 코드를 어떻게 해야할지 모르겠다..ㅜ
     }
@@ -71,8 +78,8 @@ class PostServiceTest {
     @DisplayName("게시글 수정")
     void updatePost(){
 
-        service.updatePost(1L, "게시글입니다2");
-        Post post = repository.findById(1L).get();
+        postService.updatePost(1L, "게시글입니다2");
+        Post post = postRepository.findById(1L).get();
         assertThat(post.getPostContent()).isEqualTo("게시글입니다2");
 
     }

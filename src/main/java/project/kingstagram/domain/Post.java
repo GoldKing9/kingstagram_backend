@@ -8,13 +8,15 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)//무분별한 객체생성에 대해 한번더 체크
 public class Post {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
     @Lob
     private String postContent;
@@ -23,6 +25,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE) //연관관계 편의메소드 작성해주기
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Post(String postContent, String imageUrl, Users user) {
         this.postContent = postContent;

@@ -1,4 +1,4 @@
-package project.kingstagram.Dto;
+package project.kingstagram.dto;
 
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
