@@ -29,7 +29,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public String InsertUuid(Long userId) throws RuntimeException { // 로그인 (uuid 생성)
+    public String insertUuid(Long userId) throws RuntimeException { // 로그인 (uuid 생성)
         String uuid = UUID.randomUUID().toString();
         dictionary.put(uuid, userId);
         return uuid;
