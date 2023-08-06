@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.kingstagram.domain.Comment;
 import project.kingstagram.domain.Post;
 import project.kingstagram.domain.Users;
-import project.kingstagram.dto.CommentDto;
-import project.kingstagram.dto.CommentInfo;
-import project.kingstagram.dto.CreateCommentRequest;
-import project.kingstagram.dto.GetCommentRequest;
+import project.kingstagram.dto.*;
 import project.kingstagram.repository.CommentRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
@@ -42,6 +39,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void createComment(CreateCommentRequest createCommentRequest) {
         Users users = usersRepository.findById(createCommentRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당하는 유저를 찾을 수 없습니다."));
@@ -54,6 +52,29 @@ public class CommentServiceImpl implements CommentService{
 
         commentRepository.save(comment);
     }
+    @Override
+    @Transactional //DB에 반영하기위해
+    public void editComment(EditCommentRequest editCommentRequest){
+        Comment comment = commentRepository.findById(editCommentRequest.getCommentId())
+                .orElseThrow(() -> new RuntimeException("해당하는 댓글을 찾을 수 없습니다."));
+        comment.update(editCommentRequest.getContent());
+        commentRepository.save(comment);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(DeleteCommentRequest deleteCommentRequest) {
+        Comment comment = commentRepository.findById(deleteCommentRequest.getCommentId())
+                .orElseThrow(() -> new RuntimeException("해당하는 댓글을 찾을 수 없습니다."));
+        commentRepository.delete(comment);
+    }
+
+//    @Override
+//    @Transactional
+//    public void deleteComment(Long CommentId) {
+//        commentRepository.deleteById(CommentId);
+//    }
+
 
 //    @Override
 //    public List<CommentInfo> getComments(GetCommentRequest request) {

@@ -1,13 +1,8 @@
 package project.kingstagram.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import project.kingstagram.dto.CommentInfo;
-import project.kingstagram.dto.CreateCommentRequest;
-import project.kingstagram.dto.GetCommentRequest;
+import org.springframework.web.bind.annotation.*;
+import project.kingstagram.dto.*;
 import project.kingstagram.service.CommentService;
 import project.kingstagram.service.CommentServiceImpl;
 
@@ -24,8 +19,24 @@ public class CommentController {
     }
 
     @PostMapping("/comment")
-    public String createComment(@RequestBody CreateCommentRequest createCommentRequest){
+    public String createComment(@RequestBody CreateCommentRequest createCommentRequest) {
         commentService.createComment(createCommentRequest);
         return "Success";
     }
+
+    @PutMapping("/comment")
+    public String updateComment(@RequestBody EditCommentRequest editCommentRequest) {
+        commentService.editComment(editCommentRequest);
+        return "Update";
+    }
+    @DeleteMapping("/comment")
+    public String deleteComment(@RequestBody DeleteCommentRequest deleteCommentRequest){
+        commentService.deleteComment(deleteCommentRequest);
+        return "Delete";
+    }
+//    @DeleteMapping("/comment/{commentId}")
+//    public String deleteComment(@PathVariable Long commentId){
+//        commentService.deleteComment(commentId);
+//        return "Delete";
+//    }
 }

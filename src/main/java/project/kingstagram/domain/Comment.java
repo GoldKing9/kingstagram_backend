@@ -1,6 +1,7 @@
 package project.kingstagram.domain;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,6 +24,11 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
+
+    public void update(String content) {
+        this.commentContent = content;
+        this.commentTime = LocalDateTime.now();
+    }
 
 //로그 확인용
 //    @Override
