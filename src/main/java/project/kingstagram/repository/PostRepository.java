@@ -17,4 +17,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                     " group by p.postId"
     )
     MiniDto findAllByPostId(@Param("postId") Long postId);
+
+    @Query(
+            value = "select count(1) from Post p join p.user u" +
+                    " where u.userId = :userId"
+    )
+    Integer findPostCountByUserId(@Param("userId") Long userId);
 }

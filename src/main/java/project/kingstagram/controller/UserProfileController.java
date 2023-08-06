@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import project.kingstagram.Dto.UserProfileDTO;
+import project.kingstagram.dto.UserProfileDTO;
 import project.kingstagram.service.SessionService;
 import project.kingstagram.service.UserService;
 

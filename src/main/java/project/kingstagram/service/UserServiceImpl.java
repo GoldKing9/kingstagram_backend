@@ -1,10 +1,11 @@
 package project.kingstagram.service;
 
 import org.springframework.stereotype.Service;
-import project.kingstagram.Dto.UserDTO;
-import project.kingstagram.Dto.UserProfileDTO;
-import project.kingstagram.Dto.UserSignUpDTO;
+import project.kingstagram.dto.UserDTO;
+import project.kingstagram.dto.UserProfileDTO;
+import project.kingstagram.dto.UserSignUpDTO;
 import project.kingstagram.domain.Users;
+import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
 
@@ -16,10 +17,12 @@ public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
     private final PostRepository postRepository;
+    private final FollowRepository followRepository;
 
-    public UserServiceImpl(UsersRepository usersRepository, PostRepository postRepository) {
+    public UserServiceImpl(UsersRepository usersRepository, PostRepository postRepository, FollowRepository followRepository) {
         this.usersRepository = usersRepository;
         this.postRepository = postRepository;
+        this.followRepository = followRepository;
     }
 
     @Override
@@ -30,29 +33,28 @@ public class UserServiceImpl implements UserService {
         userInfo.setUserDescription(userProfile.getUserDescription());
 
         usersRepository.save(userInfo);
-
     }
 
     @Override
     public UserProfileDTO getUserProfile(Long userId) { // 프로필 조회
         Users userInfo = usersRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("entity not found"));
-//        Users userInfo = usersRepository.findById(userId)
-//                .orElseThrow(() -> new EntityNotFoundException("entity not found"));
-//        Users userInfo = usersRepository.findById(userId)
-//                .orElseThrow(() -> new EntityNotFoundException("entity not found"));
+        Integer postCountByUserId = postRepository.findPostCountByUserId(userId);
+        Integer followingCountByUserId = followRepository.findFollowingCountByUserId(userId);
+        Integer followerCountByUserId = followRepository.findFollowerCountByUserId(userId);
+
 
         UserProfileDTO output = new UserProfileDTO();
         output.setUserId(userInfo.getUserId());
         output.setUserName(userInfo.getUserName());
         output.setUserNickname(userInfo.getUserNickname());
         output.setUserDescription(userInfo.getUserDescription());
-//        output.setPostCount(.getPostCount());
-//        output.setFollowerCount(.getFollowerCount());
-//        output.setFollowingCount(.getFollowingCount());
+        output.setPostCount(postCountByUserId);
+        output.setFollowingCount(followingCountByUserId);
+        output.setFollowerCount(followerCountByUserId);
 
         return output;
-        
+
     }
 
     @Override

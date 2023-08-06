@@ -4,9 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import project.kingstagram.Dto.UserDTO;
-import project.kingstagram.Dto.UserLogInOutDTO;
-import project.kingstagram.Dto.UserSignUpDTO;
+import project.kingstagram.dto.UserDTO;
+import project.kingstagram.dto.UserLogInOutDTO;
+import project.kingstagram.dto.UserSignUpDTO;
 import project.kingstagram.service.SessionService;
 import project.kingstagram.service.UserService;
 

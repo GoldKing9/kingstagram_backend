@@ -1,8 +1,6 @@
-package project.kingstagram.Dto;
+package project.kingstagram.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class UserProfileDTO {

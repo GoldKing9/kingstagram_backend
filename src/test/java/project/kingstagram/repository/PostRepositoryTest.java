@@ -1,5 +1,6 @@
 package project.kingstagram.repository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ class PostRepositoryTest {
             likeRepository.save(like);
         }
         Like like = Like.builder()
-                .post(postRepository.findById(1L).get())
+                .post(postRepository.findById(11L).get())
                 .build();
 
         likeRepository.save(like);
@@ -77,5 +78,13 @@ class PostRepositoryTest {
             System.out.println(miniDto.toString());
             System.out.println(miniDto2.toString());
 
+    }
+
+    @Test
+    @Rollback(value = true)
+    void 사용자_포스트_카운트_테스트(){
+        Integer res = postRepository.findPostCountByUserId(11L);
+        System.out.println(res);
+        Assertions.assertEquals(res,4);
     }
 }

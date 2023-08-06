@@ -1,10 +1,9 @@
 package project.kingstagram.service;
 
 import org.springframework.stereotype.Service;
-import project.kingstagram.Dto.UserDTO;
-import project.kingstagram.Dto.UserLogInOutDTO;
-import project.kingstagram.Dto.UserProfileDTO;
-import project.kingstagram.Dto.UserSignUpDTO;
+import project.kingstagram.dto.UserDTO;
+import project.kingstagram.dto.UserProfileDTO;
+import project.kingstagram.dto.UserSignUpDTO;
 
 @Service
 public interface UserService {

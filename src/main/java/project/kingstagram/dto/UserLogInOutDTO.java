@@ -1,9 +1,10 @@
-package project.kingstagram.Dto;
+package project.kingstagram.dto;
 
 import lombok.Data;
 
 @Data
-public class UserSignUpDTO {
+public class UserLogInOutDTO {
     private int responseCode;
     private String responseMessage;
+    private String uuid;
 }
