@@ -1,10 +1,16 @@
 package project.kingstagram.domain;
 
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id @GeneratedValue
@@ -16,4 +22,5 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
+
 }
