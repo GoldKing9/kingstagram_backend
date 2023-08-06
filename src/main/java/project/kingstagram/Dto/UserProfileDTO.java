@@ -14,4 +14,5 @@ public class UserProfileDTO {
     private int followerCount;
     private int followingCount;
     private int responseCode;
+    private String responseMessage;
 }

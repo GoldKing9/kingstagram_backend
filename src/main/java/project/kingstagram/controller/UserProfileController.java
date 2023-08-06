@@ -1,6 +1,5 @@
 package project.kingstagram.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +20,13 @@ public class UserProfileController {
         this.sessionService = sessionService;
     }
 
+    private boolean validateDescription(String description) {
+        return description.length() <= 200;
+    }
+
     // 프로필 조회
     @GetMapping("/api/user/{uuid}")
-    public UserProfileDTO getUserProfile(@PathVariable String uuid) {
+    public UserProfileDTO showUserProfile(@PathVariable String uuid) {
 
         UserProfileDTO output = new UserProfileDTO();
         Long userId = sessionService.getUserId(uuid);
@@ -58,10 +61,17 @@ public class UserProfileController {
         UserProfileDTO output = new UserProfileDTO();
         Long userId = sessionService.getUserId(uuid);
 
-        //uuid가 실제로 세션 해시맵에 존재하는지 판단
-        //세션이 없으면 에러라고 코드 -1 리턴
+        if (!validateDescription(userDescription)) {
+            output.setResponseCode(-1);
+            output.setResponseMessage("소개글은 200자를 넘을 수 없습니다.");
+            return output;
+        }
+
+        // uuid가 실제로 세션 해시맵에 존재하는지 판단
+        // 세션이 없으면 에러라고 코드 -1 리턴
         if(userId == -1) {
             output.setResponseCode(-1);
+            output.setResponseMessage("세션이 만료되었습니다.");
             return output;
         }
 

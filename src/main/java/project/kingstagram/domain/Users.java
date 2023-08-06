@@ -20,5 +20,5 @@ public class Users {
     private String userNickname;
     private String userPw;
     private String userEmail;
-
+    private String userDescription;
 }

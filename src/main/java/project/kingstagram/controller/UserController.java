@@ -96,8 +96,8 @@ public class UserController {
             return output;
         }
         // 로그인 실패
-        Long loginStatus = userService.login(user.getUserEmail(),user.getUserPw());
-        if(loginStatus == -1){
+        Long userId = userService.login(user.getUserEmail(),user.getUserPw());
+        if(userId == -1) {
             output.setResponseCode(-1);
             output.setResponseMessage("아이디 또는 비번이 잘못됨");
             return output;
@@ -105,7 +105,7 @@ public class UserController {
         // 로그인 성공한 유저 uuid 생성하고 딕셔너리에 저장 후 uuid와 1 리턴, 로그인 실패하면 -1 리턴
         String uuid = null;
         try {
-            uuid = sessionService.InsertUuid(user.getUserId());
+            uuid = sessionService.InsertUuid(userId);
             if(uuid == null) throw new RuntimeException("로그인 실패");
         } catch(Exception e){//로그인 실패한 경우
             output.setResponseCode(-1);
