@@ -7,7 +7,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "LIKES")
+@Table(
+        name="LIKES",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "postIdAnduserId",
+                        columnNames = {"postId","userId"}
+                )
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
     @Id

@@ -28,21 +28,25 @@ class FollowRepositoryTest {
     @BeforeEach
     void before(){
 
-        Users toUser = new Users();
-        toUser.setUserNickname("bbb");
-        toUser.setUserName("미나");
-        toUser.setUserPw("123");
-        toUser.setUserDescription("hello");
-        toUser.setUserEmail("aaa@gmail.com");
+        Users toUser = Users.builder()
+                        .userDescription("hello")
+                        .userPw("123")
+                        .userEmail("aaa@gmail.com")
+                        .userName("미나")
+                        .userNickname("bbb")
+                        .build();
+
         usersRepository.save(toUser);
 
         for(int i=1;i<=10;i++){
-            Users fromUser = new Users();
-            fromUser.setUserNickname("aaa");
-            fromUser.setUserName("경선");
-            fromUser.setUserPw("123");
-            fromUser.setUserDescription("hello123");
-            fromUser.setUserEmail("aaa@gmail.com");
+            Users fromUser = Users.builder()
+                    .userDescription("hello123")
+                    .userPw("123")
+                    .userEmail("aaa@gmail.com")
+                    .userName("경선")
+                    .userNickname("aaa")
+                    .build();
+
             Users  saveUser = usersRepository.save(fromUser);
             Long fromUserId = saveUser.getUserId();
             followService.makeFriend(1L, fromUserId);

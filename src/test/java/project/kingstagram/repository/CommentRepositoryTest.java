@@ -27,11 +27,13 @@ class CommentRepositoryTest {
     @BeforeEach
     void init(){
         for(int i=1; i<=10; i++) {
-            Users user = new Users();
-            user.setUserNickname("k._.");
-            user.setUserName("경선" + i);
-            user.setUserPw("123");
-            user.setUserEmail("aaa@gmail.com");
+            Users user =Users.builder()
+                    .userDescription("hello123")
+                    .userPw("123")
+                    .userEmail("aaa@gmail.com")
+                    .userName("경선")
+                    .userNickname("aaa")
+                    .build();
 
             Post post = Post.builder()
                     .postContent("내용" + i)

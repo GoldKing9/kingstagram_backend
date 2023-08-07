@@ -7,8 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import project.kingstagram.post.dto.PostDto;
 import project.kingstagram.domain.Post;
 import project.kingstagram.post.dto.response.PostOneDto;
+import project.kingstagram.post.dto.response.UserPostAllDto;
+import project.kingstagram.post.dto.response.UserPostOneDto;
 import project.kingstagram.repository.CommentRepository;
+import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;
+import project.kingstagram.user.dto.response.ToUserDto;
+
+import java.awt.print.Pageable;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -17,8 +24,6 @@ import project.kingstagram.repository.PostRepository;
 public class PostService{
 
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-
     public Long savePost(PostDto postDto){
         Post post = postDto.toEntity();
         Post savePost = postRepository.save(post);
@@ -44,7 +49,11 @@ public class PostService{
     }
 
     @Transactional(readOnly = true)
-    public void getAllPost(int userId) {
-//        postRepository.findAllPostByUserId(userId)
+    public UserPostAllDto getAllPost(Long userId) {
+        List<UserPostOneDto> allPostByUserId = postRepository.findAllPostByUserId(userId);
+            return UserPostAllDto.builder()
+                    .posts(allPostByUserId)
+                    .build();
+
     }
 }

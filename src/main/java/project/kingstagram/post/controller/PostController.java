@@ -2,6 +2,7 @@ package project.kingstagram.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +13,13 @@ import project.kingstagram.post.dto.response.PostAllDto;
 import project.kingstagram.post.dto.request.PostCreateForm;
 import project.kingstagram.post.dto.request.PostUpdateDto;
 import project.kingstagram.post.dto.response.PostOneDto;
+import project.kingstagram.post.dto.response.UserPostAllDto;
 import project.kingstagram.post.service.PostService;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.print.Pageable;
 import java.io.IOException;
 
 
@@ -30,7 +33,7 @@ public class PostController {
 
 
     @PostMapping(value = "/api/feed", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) //consumes 속성 : 사용자가 Request Body에 담는 타입 제한, 헤더에 꼭 application/json존재해야함
-    public String createPost(@ModelAttribute PostCreateForm postCreateForm, @SessionAttribute int userId) throws IOException {
+    public String createPost(@ModelAttribute PostCreateForm postCreateForm, @SessionAttribute Long userId) throws IOException {
         System.out.println("userid : "+userId);
         if(postCreateForm.getImageUrl().isEmpty()){
             throw new IllegalArgumentException();
@@ -81,7 +84,7 @@ public class PostController {
 
     //단건 조회
     @GetMapping("/api/feed/{postId}")
-    public PostAllDto getPost(@PathVariable Long postId, @SessionAttribute int userId){
+    public PostAllDto getPost(@PathVariable Long postId, @SessionAttribute Long userId){
         PostOneDto singlePost = postService.getSinglePost(postId);
         return PostAllDto.builder()
                 .post(singlePost).build();
@@ -89,17 +92,17 @@ public class PostController {
     }
 
     // 여러건 조회
-//    @GetMapping("/api/feeds")
-//    public String getPostAll(@SessionAttribute int userId){
-//        //사용자 id체크
-//
-//        // 사용자 id와 연관되어 있는 게시글들 전부 불러와보내줌
-//        postService.getAllPost(userId);
-//
-//    }
+    @GetMapping("/api/feeds")
+    public UserPostAllDto getPostAll(@SessionAttribute Long userId){
+        //사용자 id체크
+
+        // 사용자 id와 연관되어 있는 게시글들 전부 불러와보내줌
+        return postService.getAllPost(userId);
+
+    }
 
     @GetMapping("/test")
-    public void test(@SessionAttribute int userId){ //세션에 저장되어있는 사용자 아이디가져와 사용
+    public void test(@SessionAttribute Long userId){ //세션에 저장되어있는 사용자 아이디가져와 사용
 
         log.info("test userId = {}", userId);
     }

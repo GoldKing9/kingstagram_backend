@@ -23,20 +23,22 @@ class FollowServiceTest {
 
     @BeforeEach
     void before(){
-        Users fromUser = new Users();
-        fromUser.setUserNickname("aaa");
-        fromUser.setUserName("경선");
-        fromUser.setUserPw("123");
-        fromUser.setUserDescription("hello123");
-        fromUser.setUserEmail("aaa@gmail.com");
+        Users fromUser = Users.builder()
+                .userDescription("hello123")
+                .userPw("123")
+                .userEmail("aaa@gmail.com")
+                .userName("경선")
+                .userNickname("aaa")
+                .build();
         usersRepository.save(fromUser);
 
-        Users toUser = new Users();
-        toUser.setUserNickname("bbb");
-        toUser.setUserName("미나");
-        toUser.setUserPw("123");
-        toUser.setUserDescription("hello");
-        toUser.setUserEmail("aaa@gmail.com");
+        Users toUser = Users.builder()
+                .userDescription("hello")
+                .userPw("123")
+                .userEmail("aaa@gmail.com")
+                .userName("미나")
+                .userNickname("bbb")
+                .build();
         usersRepository.save(toUser);
 
     }
