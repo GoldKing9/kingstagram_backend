@@ -1,6 +1,7 @@
 package project.kingstagram.user.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,9 +43,9 @@ class FollowServiceTest {
         usersRepository.save(toUser);
 
     }
-
-    @Rollback(value = false)
     @Test
+    @Rollback(value = false)
+    @DisplayName("userId가 toUserId를 팔로우 신청")
     void makeFriend(){
 
         followService.makeFriend(1L,2L);
@@ -54,13 +55,6 @@ class FollowServiceTest {
 
     }
 
-    @Test
-    void unFollow(){
 
-    }
-    @Test
-    void getFollowers(){
-
-    }
 
 }

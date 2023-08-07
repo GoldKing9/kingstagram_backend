@@ -8,13 +8,13 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        name="Follow",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "followFromTo",
-                        columnNames = {"fromUserId","toUserId"}
-                )
-        }
+    name="Follow",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "followFromTo",
+            columnNames = {"fromUserId","toUserId"}
+        )
+    }
 )
 @Getter
 @NoArgsConstructor

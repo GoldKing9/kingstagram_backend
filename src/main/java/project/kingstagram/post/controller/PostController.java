@@ -2,6 +2,8 @@ package project.kingstagram.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +21,6 @@ import project.kingstagram.post.service.PostService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.awt.print.Pageable;
 import java.io.IOException;
 
 
@@ -93,11 +94,12 @@ public class PostController {
 
     // 여러건 조회
     @GetMapping("/api/feeds")
-    public UserPostAllDto getPostAll(@SessionAttribute Long userId){
+    public UserPostAllDto getPostAll(@SessionAttribute Long userId, Pageable pageable){
         //사용자 id체크
-
+        log.info("controlloer pageable number : {}",pageable.getPageNumber() );
+        log.info("controlloer pageable size : {}",pageable.getPageSize() );
         // 사용자 id와 연관되어 있는 게시글들 전부 불러와보내줌
-        return postService.getAllPost(userId);
+        return postService.getAllPost(userId, pageable);
 
     }
 

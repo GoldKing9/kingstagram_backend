@@ -1,6 +1,7 @@
 package project.kingstagram.repository;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,11 +58,13 @@ class FollowRepositoryTest {
 
     }
     @Test
+    @DisplayName("나를 팔로우하는 사람들 조회")
     void fromUsers(){
         followRepository.findFromUserAllByUserId(1L);
     }
 
     @Test
+    @DisplayName("내가 팔로우 하는 사람들 조회")
     void toUsers(){
         List<ToUserDto> toUserAllByUserId = followRepository.findToUserAllByUserId(2L);
         for (ToUserDto toUserDto : toUserAllByUserId) {
@@ -71,6 +74,7 @@ class FollowRepositoryTest {
 
     }
     @Test
+    @DisplayName("언팔로우")
     void deleteToUser(){
         followRepository.deleteToUserByUserId(1L, 2L);
     }

@@ -65,8 +65,8 @@ class PostServiceTest {
     }
 //modifying , transactional - delete시 붙여야됨! -> jpa가 가지고있는 메소드 말고 커스텀할때 사용해야함!
     @Test
-    @DisplayName("게시글 삭제")
     @Rollback(false)
+    @DisplayName("게시글 삭제")
     void deletePost(){
         long cnt = postRepository.count();
         postService.deletePost(2L);
@@ -76,8 +76,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 수정")
     @Rollback(false)
+    @DisplayName("게시글 수정")
     void updatePost(){
 
         postService.updatePost(1L, "게시글입니다2");

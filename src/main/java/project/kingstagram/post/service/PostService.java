@@ -2,6 +2,8 @@ package project.kingstagram.post.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.kingstagram.post.dto.PostDto;
@@ -14,7 +16,6 @@ import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.user.dto.response.ToUserDto;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Slf4j
@@ -49,8 +50,8 @@ public class PostService{
     }
 
     @Transactional(readOnly = true)
-    public UserPostAllDto getAllPost(Long userId) {
-        List<UserPostOneDto> allPostByUserId = postRepository.findAllPostByUserId(userId);
+    public UserPostAllDto getAllPost(Long userId, Pageable pageable) {
+        List<UserPostOneDto> allPostByUserId = postRepository.findAllPostByUserId(userId, pageable);
             return UserPostAllDto.builder()
                     .posts(allPostByUserId)
                     .build();

@@ -8,13 +8,13 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        name="LIKES",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "postIdAnduserId",
-                        columnNames = {"postId","userId"}
-                )
-        }
+    name="LIKES",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "postIdAnduserId",
+            columnNames = {"postId","userId"}
+        )
+    }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
