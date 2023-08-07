@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
     public UserProfileDTO getUserProfile(Long userId) { // 프로필 조회
         Users userInfo = usersRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("entity not found"));
+
         Integer postCountByUserId = postRepository.findPostCountByUserId(userId);
         Integer followingCountByUserId = followRepository.findFollowingCountByUserId(userId);
         Integer followerCountByUserId = followRepository.findFollowerCountByUserId(userId);
@@ -87,4 +88,7 @@ public class UserServiceImpl implements UserService {
         }
         return validateUserEmailAndUserPw.get(0).getUserId();
     }
+    // 왜 List를 사용하지? => 방어 로직! 혹시 이메일이 중복으로 들어가는 경우가 있으면 count가 2인 리스트로는 받을 수 있는데 그냥 Users 객체로 받으려고 하면 에러 남
+    // 에러 처리를 다 해 줄 거면 상관 없는데 안 할 거니까 list로 구현하는 게 나을 듯 해서 List 사용
+    // if (Users == null) 로 체크하면 안 되나? => List를 안 썼으면 가능
 }

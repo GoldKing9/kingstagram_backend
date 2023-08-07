@@ -1,16 +1,21 @@
 package project.kingstagram.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.annotation.*;
 import project.kingstagram.dto.UserDTO;
 import project.kingstagram.dto.UserLogInOutDTO;
 import project.kingstagram.dto.UserSignUpDTO;
 import project.kingstagram.service.SessionService;
 import project.kingstagram.service.UserService;
 
-@Controller
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+@RestController
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -22,16 +27,19 @@ public class UserController {
     }
 
     private boolean validateEmail(String email) {
-        return true;
+        String emailPattern = "^[a-zA-Z0-9!@#$%^&*]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$";
+        return email.matches(emailPattern);
     }
     private boolean validateNickname(String nickname) {
-        return true;
+        String nicknamePattern = "^[a-z0-9!@#$%^&*]+$";
+        return !nickname.contains(" ") && nickname.matches(nicknamePattern);
     }
     private boolean validateName(String name) {
-        return true;
+        return !name.contains(" ") && name.length() <= 16;
     }
     private boolean validatePw(String pw) {
-        return true;
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,16}$";
+        return !pw.contains(" ") && pw.matches(passwordPattern);
     }
 
     // 회원가입
@@ -48,7 +56,7 @@ public class UserController {
 
         if(!validateNickname(user.getUserNickname())){
             output.setResponseCode(-1);
-            output.setResponseMessage("사용자 이름(Nickname)은 띄어쓰기 없이, 영어소문자,숫자,_로만 작성해주세요");
+            output.setResponseMessage("사용자 이름(Nickname)은 띄어쓰기 없이, 영어소문자,숫자로만 작성해주세요");
             return output;
         }
 
@@ -78,11 +86,21 @@ public class UserController {
 
     }
 
+    // 세션 테스트
+    @GetMapping("/api/test")
+    public Integer test(@SessionAttribute int userId){
+        return userId;
+    }
+
     // 로그인
     @PostMapping("api/login")
-    public UserLogInOutDTO login(@RequestBody UserDTO user) {
-
+    public UserLogInOutDTO login(HttpServletRequest httpServletRequest, @RequestBody UserDTO user) {
+        String jSessionId = httpServletRequest.getRequestedSessionId();
+        log.info(jSessionId);
+        log.info(user.getUserEmail());
+        log.info(user.getUserPw());
         UserLogInOutDTO output = new UserLogInOutDTO();
+
 
         if(!validateEmail(user.getUserEmail())){
             output.setResponseCode(-1);
@@ -95,6 +113,7 @@ public class UserController {
             output.setResponseMessage("비밀번호는 8자 이상 16자 이하로, 띄어쓰기 없이, 영어대문자, 소문자, 특수기호가 포함되도록 작성해주세요");
             return output;
         }
+
         // 로그인 실패
         Long userId = userService.login(user.getUserEmail(),user.getUserPw());
         if(userId == -1) {
@@ -102,35 +121,28 @@ public class UserController {
             output.setResponseMessage("아이디 또는 비번이 잘못됨");
             return output;
         }
-        // 로그인 성공한 유저 uuid 생성하고 딕셔너리에 저장 후 uuid와 1 리턴, 로그인 실패하면 -1 리턴
-        String uuid = null;
-        try {
-            uuid = sessionService.insertUuid(userId);
-            if(uuid == null) throw new RuntimeException("로그인 실패");
-        } catch(Exception e){//로그인 실패한 경우
-            output.setResponseCode(-1);
-            output.setResponseMessage("로그인 실패");
-            return output;
-        }
+
+        // DB에서 아이디 비번 조회 후 세션 생성
+        HttpSession httpSession =  httpServletRequest.getSession();
+        httpSession.setAttribute("userId" , userId);
+        log.info(httpSession.getId());
+
         output.setResponseCode(1);
         output.setResponseMessage("로그인 성공");
-        output.setUuid(uuid);
+
         return output;
     }
 
     // 로그아웃
     @PostMapping("api/logout/{uuid}")
-    public UserLogInOutDTO logout(@PathVariable String uuid) {
+    public UserLogInOutDTO logout(HttpServletRequest httpServletRequest) {
 
         UserLogInOutDTO output = new UserLogInOutDTO();
-
-        Long res = sessionService.deleteUuid(uuid);
-        if (res == null) {
-            output.setResponseCode(-1);
-            return output;
-        }
+        HttpSession httpSession =  httpServletRequest.getSession();
+        httpSession.removeAttribute("userId");
         output.setResponseCode(1);
         return output;
     }
+
 
 }

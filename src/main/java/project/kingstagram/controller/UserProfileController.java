@@ -1,15 +1,15 @@
 package project.kingstagram.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import project.kingstagram.dto.SetProfileDTO;
 import project.kingstagram.dto.UserProfileDTO;
 import project.kingstagram.service.SessionService;
 import project.kingstagram.service.UserService;
 
-@Controller
+@RestController
+@Slf4j
 public class UserProfileController {
 
     private final UserService userService;
@@ -25,11 +25,10 @@ public class UserProfileController {
     }
 
     // 프로필 조회
-    @GetMapping("/api/user/{uuid}")
-    public UserProfileDTO showUserProfile(@PathVariable String uuid) {
+    @GetMapping("/api/user/profile")
+    public UserProfileDTO showUserProfile(@SessionAttribute Long userId) {
 
         UserProfileDTO output = new UserProfileDTO();
-        Long userId = sessionService.getUserId(uuid);
 
         //uuid가 실제로 세션 해시맵에 존재하는지 판단
         //세션이 없으면 에러라고 코드 -1 리턴
@@ -37,6 +36,7 @@ public class UserProfileController {
             output.setResponseCode(-1);
             return output;
         }
+//        ---- 이거 다시 짜야 됨!! uuid 안 쓰기로 했는데 관련된 거 다 바꿔야 되겠다..
 
         // 있으면(세션이 유효하면) 조회 후 리턴
         // uuid에 해당하는 userId를 조회해서 가져옴
@@ -55,19 +55,18 @@ public class UserProfileController {
     }
 
     // 프로필 편집 -> 제출
-    @PutMapping("/api/user/edit/{uuid}")
-    public UserProfileDTO editUserProfile(@PathVariable String uuid, @RequestBody String userDescription) {
+    @PutMapping("/api/user/edit/")
+    public SetProfileDTO editUserProfile(@SessionAttribute Long userId , @RequestBody SetProfileDTO userDescription) {
 
-        UserProfileDTO output = new UserProfileDTO();
-        Long userId = sessionService.getUserId(uuid);
+        log.info(userDescription.getUserDescription());
+        SetProfileDTO output = new SetProfileDTO();
 
-        if (!validateDescription(userDescription)) {
+        if (!validateDescription(userDescription.getUserDescription())) {
             output.setResponseCode(-1);
             output.setResponseMessage("소개글은 200자를 넘을 수 없습니다.");
             return output;
         }
 
-        // uuid가 실제로 세션 해시맵에 존재하는지 판단
         // 세션이 없으면 에러라고 코드 -1 리턴
         if(userId == -1) {
             output.setResponseCode(-1);
@@ -75,14 +74,14 @@ public class UserProfileController {
             return output;
         }
 
-        // 있으면(세션이 유효하면) 조회 후 리턴
-        // uuid에 해당하는 userId를 조회해서 가져옴
+        // 있으면(세션이 유효하면) 해당 유저 엔티티 내용 수정 후 리턴
         UserProfileDTO input = new UserProfileDTO();
         input.setUserId(userId);
-        input.setUserDescription(userDescription);
+        input.setUserDescription(userDescription.getUserDescription());
         userService.setUserProfile(input);
 
         output.setResponseCode(1);
+        output.setResponseMessage("프로필 편집이 완료되었습니다.");
         return output;
     }
 

@@ -8,14 +8,14 @@ import project.kingstagram.domain.Follow;
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     @Query(
-            value = "select count(1) from Follow f" +
-                    " where f.fromUser = :userId"
+            value = "select count(1) from Follow f " +
+                    " where f.fromUser.userId = :userId"
     )
     Integer findFollowingCountByUserId(@Param("userId") Long userId);
 
     @Query(
-            value = "select count(1) from Follow f" +
-                    " where f.toUser = :userId"
+            value = "select count(1) from Follow f " +
+                    " where f.toUser.userId = :userId"
     )
     Integer findFollowerCountByUserId(@Param("userId") Long userId);
 
