@@ -77,6 +77,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("게시글 수정")
+    @Rollback(false)
     void updatePost(){
 
         postService.updatePost(1L, "게시글입니다2");
