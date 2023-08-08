@@ -5,15 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import project.kingstagram.domain.Comment;
-import project.kingstagram.domain.Post;
-import project.kingstagram.dto.CommentDto;
+import project.kingstagram.post.dto.response.CommentDto;
+import project.kingstagram.post.service.CommentService;
 import project.kingstagram.repository.CommentRepository;
 import project.kingstagram.repository.UsersRepository;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

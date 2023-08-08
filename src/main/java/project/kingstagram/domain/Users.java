@@ -11,7 +11,8 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 @ToString
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 public class Users {
 
     @Id @GeneratedValue

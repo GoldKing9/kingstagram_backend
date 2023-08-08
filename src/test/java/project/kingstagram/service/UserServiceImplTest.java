@@ -1,25 +1,22 @@
 package project.kingstagram.service;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.kingstagram.dto.UserDTO;
-import project.kingstagram.dto.UserProfileDTO;
+import project.kingstagram.user.dto.response.UserDTO;
+import project.kingstagram.user.dto.response.UserProfileDTO;
 import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
-
-import javax.transaction.Transactional;
+import project.kingstagram.user.service.UserServiceImpl;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceImplTest {
 
-    @Autowired UserServiceImpl userService;
+    @Autowired
+    UserServiceImpl userService;
     @Autowired UsersRepository usersRepository;
     @Autowired PostRepository postRepository;
     @Autowired  FollowRepository followRepository;

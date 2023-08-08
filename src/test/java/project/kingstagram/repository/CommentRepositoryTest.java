@@ -8,7 +8,7 @@ import org.springframework.test.annotation.Rollback;
 import project.kingstagram.domain.Comment;
 import project.kingstagram.domain.Post;
 import project.kingstagram.domain.Users;
-import project.kingstagram.post.dto.response.CommentDto;
+import project.kingstagram.post.dto.response.CommentInfo;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -65,9 +65,9 @@ class CommentRepositoryTest {
     @Test
     @Rollback(false)
     void findAllByPostId(){
-        List<CommentDto> list = commentRepository.findAllByPostId(2L);
-        for (CommentDto commentDto : list) {
-            System.out.println(commentDto.toString());
+        List<CommentInfo> list = commentRepository.findAllByPostId(2L);
+        for (CommentInfo commentInfo : list) {
+            System.out.println(commentInfo.toString());
         }
     }
 

@@ -1,36 +1,20 @@
 package project.kingstagram.post.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
-
-import java.time.LocalDateTime;
+import lombok.*;
+import project.kingstagram.domain.Comment;
 
 @Getter
-public class
-CommentDto {
-    private Long commentId;
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentDto {
     private String commentContent;
-    private LocalDateTime commentTime;
-    private Long userId;
-    private String userNickname;
 
-    @Builder
-    public CommentDto(Long commentId, String commentContent, LocalDateTime commentTime, Long userId, String userNickname) {
-        this.commentId = commentId;
-        this.commentContent = commentContent;
-        this.commentTime = commentTime;
-        this.userId = userId;
-        this.userNickname = userNickname;
+    public Comment toEntity(){
+        return Comment.builder()
+                .commentContent(this.commentContent)
+                .build();
     }
 
-    @Override
-    public String toString() {
-        return "CommentDto{" +
-                "commentId=" + commentId +
-                ", commentContent='" + commentContent + '\'' +
-                ", commentTime=" + commentTime +
-                ", userId=" + userId +
-                ", userNickname='" + userNickname + '\'' +
-                '}';
-    }
 }

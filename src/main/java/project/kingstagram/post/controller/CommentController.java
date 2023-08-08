@@ -1,13 +1,13 @@
-package project.kingstagram.controller;
+package project.kingstagram.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
-import project.kingstagram.dto.*;
-import project.kingstagram.dto.CreateCommentRequest;
-import project.kingstagram.dto.EditCommentRequest;
-import project.kingstagram.service.CommentService;
+import project.kingstagram.post.dto.response.CommentInfo;
+import project.kingstagram.post.dto.request.CreateCommentRequest;
+import project.kingstagram.post.dto.request.EditCommentRequest;
+import project.kingstagram.post.service.CommentService;
 
 
 import java.util.List;
@@ -27,6 +27,7 @@ public class CommentController {
     public String createComment(@RequestBody CreateCommentRequest createCommentRequest, @SessionAttribute Long userId) {
         commentService.createComment(createCommentRequest,userId);
         return "Success";
+    }
     @PutMapping("/api/comment")
     public String updateComment(@RequestBody EditCommentRequest editCommentRequest, @SessionAttribute Long userId) {
         commentService.editComment(editCommentRequest,userId);
