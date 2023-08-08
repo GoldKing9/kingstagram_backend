@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import project.kingstagram.dto.PostDto;
+import project.kingstagram.post.dto.PostDto;
 import project.kingstagram.domain.Comment;
 import project.kingstagram.domain.Post;
 import project.kingstagram.repository.CommentRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
+import project.kingstagram.post.service.PostService;
 
 import javax.transaction.Transactional;
 
@@ -64,8 +65,8 @@ class PostServiceTest {
     }
 //modifying , transactional - delete시 붙여야됨! -> jpa가 가지고있는 메소드 말고 커스텀할때 사용해야함!
     @Test
-    @DisplayName("게시글 삭제")
     @Rollback(false)
+    @DisplayName("게시글 삭제")
     void deletePost(){
         long cnt = postRepository.count();
         postService.deletePost(2L);
@@ -75,6 +76,7 @@ class PostServiceTest {
     }
 
     @Test
+    @Rollback(false)
     @DisplayName("게시글 수정")
     void updatePost(){
 
@@ -82,5 +84,10 @@ class PostServiceTest {
         Post post = postRepository.findById(1L).get();
         assertThat(post.getPostContent()).isEqualTo("게시글입니다2");
 
+    }
+    @Test
+    @DisplayName("게시글 조회")
+    void getPost(){
+        postService.getSinglePost(1L);
     }
 }

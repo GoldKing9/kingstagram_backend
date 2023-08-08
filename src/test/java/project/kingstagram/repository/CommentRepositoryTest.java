@@ -8,28 +8,32 @@ import org.springframework.test.annotation.Rollback;
 import project.kingstagram.domain.Comment;
 import project.kingstagram.domain.Post;
 import project.kingstagram.domain.Users;
-import project.kingstagram.dto.postGet.CommentDto;
+import project.kingstagram.post.dto.response.CommentDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 class CommentRepositoryTest {
 
-    @Autowired CommentRepository commentRepository;
-    @Autowired PostRepository postRepository;
-    @Autowired UsersRepository usersRepository;
+    @Autowired
+    CommentRepository commentRepository;
+    @Autowired
+    PostRepository postRepository;
+    @Autowired
+    UsersRepository usersRepository;
 
     @BeforeEach
     void init(){
         for(int i=1; i<=10; i++) {
-            Users user = new Users();
-            user.setUserNickname("k._.");
-            user.setUserName("경선" + i);
-            user.setUserPw("123");
-            user.setUserEmail("aaa@gmail.com");
+            Users user =Users.builder()
+                    .userDescription("hello123")
+                    .userPw("123")
+                    .userEmail("aaa@gmail.com")
+                    .userName("경선")
+                    .userNickname("aaa")
+                    .build();
 
             Post post = Post.builder()
                     .postContent("내용" + i)
