@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
 import project.kingstagram.dto.*;
-import project.kingstagram.dto.request.CreateCommentRequest;
-import project.kingstagram.dto.request.EditCommentRequest;
+import project.kingstagram.dto.CreateCommentRequest;
+import project.kingstagram.dto.EditCommentRequest;
 import project.kingstagram.service.CommentService;
 
 

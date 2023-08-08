@@ -1,8 +1,8 @@
 package project.kingstagram.service;
 
 import project.kingstagram.dto.*;
-import project.kingstagram.dto.request.CreateCommentRequest;
-import project.kingstagram.dto.request.EditCommentRequest;
+import project.kingstagram.dto.CreateCommentRequest;
+import project.kingstagram.dto.EditCommentRequest;
 
 import java.util.List;
 
