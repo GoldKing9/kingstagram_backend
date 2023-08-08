@@ -1,6 +1,5 @@
 package project.kingstagram.repository;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     )
     PostOneDto findAllByPostId(@Param("postId") Long postId);
 
-//사용자의 게시글과 사용자가 팔로우하는 사용자들의 게시글을 조회
+//사용자의 게시글과 사용자가 팔로우하는 사용자들의 게시글을 조회 + 사용자가 좋아요를 눌렀는지 체크하는 로직 필요
     @Query(
             value = "select new project.kingstagram.post.dto.response.UserPostOneDto" +
                     "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(distinct l), count(c))" +
@@ -34,5 +33,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     )
     List<UserPostOneDto> findAllPostByUserId(@Param("userId") Long userId, Pageable pageable);
 
-}
 
+    @Query(
+            value = "select count(1) from Post p join p.user u" +
+                    " where u.userId = :userId"
+    )
+    Integer findPostCountByUserId(@Param("userId") Long userId);
+}
