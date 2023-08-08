@@ -18,7 +18,6 @@ public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
-    private String postTitle;
     @Lob
     private String postContent;
     private LocalDateTime postTime;
