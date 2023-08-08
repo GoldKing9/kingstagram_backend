@@ -1,42 +1,42 @@
 package project.kingstagram.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.*;
 import project.kingstagram.dto.*;
+import project.kingstagram.dto.request.CreateCommentRequest;
+import project.kingstagram.dto.request.EditCommentRequest;
 import project.kingstagram.service.CommentService;
-import project.kingstagram.service.CommentServiceImpl;
+
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/comment")
-    public List<CommentInfo> getComments(@RequestBody GetCommentRequest request) {
-        return commentService.getComments(request);
+    @GetMapping("api/comment/{postId}")
+    public List<CommentInfo> getComments(@PathVariable Long postId) {
+        log.info("request = {}", postId);
+        return commentService.getComments(postId);
     }
-
-    @PostMapping("/comment")
-    public String createComment(@RequestBody CreateCommentRequest createCommentRequest) {
-        commentService.createComment(createCommentRequest);
+    @PostMapping("/api/comment")
+    public String createComment(@RequestBody CreateCommentRequest createCommentRequest, @SessionAttribute Long userId) {
+        commentService.createComment(createCommentRequest,userId);
         return "Success";
     }
-
-    @PutMapping("/comment")
-    public String updateComment(@RequestBody EditCommentRequest editCommentRequest) {
-        commentService.editComment(editCommentRequest);
+    @PutMapping("/api/comment")
+    public String updateComment(@RequestBody EditCommentRequest editCommentRequest, @SessionAttribute Long userId) {
+        commentService.editComment(editCommentRequest,userId);
         return "Update";
     }
-    @DeleteMapping("/comment")
-    public String deleteComment(@RequestBody DeleteCommentRequest deleteCommentRequest){
-        commentService.deleteComment(deleteCommentRequest);
+    @DeleteMapping("/api/comment/{commentId}")
+    public String deleteComment(@PathVariable Long commentId,@SessionAttribute Long userId){
+        commentService.deleteComment(commentId);
         return "Delete";
     }
-//    @DeleteMapping("/comment/{commentId}")
-//    public String deleteComment(@PathVariable Long commentId){
-//        commentService.deleteComment(commentId);
-//        return "Delete";
-//    }
+
 }

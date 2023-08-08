@@ -1,15 +1,16 @@
 package project.kingstagram.service;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import project.kingstagram.dto.*;
+import project.kingstagram.dto.request.CreateCommentRequest;
+import project.kingstagram.dto.request.EditCommentRequest;
 
 import java.util.List;
 
 public interface CommentService {
     Long saveComment(CommentDto commentDto);
-    List<CommentInfo> getComments(GetCommentRequest request);
-    void createComment(CreateCommentRequest request);
-    void editComment(EditCommentRequest request);
+    List<CommentInfo> getComments(Long postId);
+    void createComment(CreateCommentRequest request, Long userId);
+    void editComment(EditCommentRequest request, Long userId);
     //void deleteComment(Long CommentId);
-    void deleteComment(DeleteCommentRequest request);
+    void deleteComment(Long commentId);
 }

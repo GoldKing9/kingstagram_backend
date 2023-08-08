@@ -18,16 +18,20 @@ public class Comment {
     @Lob
     private String commentContent;
     private LocalDateTime commentTime;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
     private Post post;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private Users user;
 
     public void update(String content) {
         this.commentContent = content;
         this.commentTime = LocalDateTime.now();
+    }
+    public void add(Post post){
+        this.post = post;
+        post.getComments().add(this);
     }
 
 //로그 확인용
