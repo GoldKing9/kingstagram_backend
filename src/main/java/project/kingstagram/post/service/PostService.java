@@ -66,5 +66,6 @@ public class PostService{
         output.setPostIdAndImageUrlDTOList(myPostByUserId);
         return output;
 
+        // myPostByUserId.size()로 받아서 총 페이지 쏴 줘도 되나? => pageable에서 size 최대 10개로 받음 => size 최대 10
     }
 }

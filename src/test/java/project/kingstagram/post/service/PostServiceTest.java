@@ -22,12 +22,12 @@ class PostServiceTest {
     PostRepository postRepository;
     @Test
     void getMyPost() {
-//        Long userId = 11L;
-//        Pageable pageable = Pageable.ofSize(2);
-//        UserProfilePostDTO myPost = postService.getMyPost(userId, pageable);
-//        System.out.println(myPost.getTotalPages());
-//        System.out.println(myPost.toString());
-        System.out.println(postRepository.findCountPostByUserId(125L));
+        Long userId = 11L;
+        Pageable pageable = Pageable.ofSize(2);
+        UserProfilePostDTO myPost = postService.getMyPost(userId, pageable);
+        System.out.println(myPost.getTotalPages());
+        System.out.println(myPost.toString());
+//        System.out.println(postRepository.findCountPostByUserId(125L));
 
     }
 }
