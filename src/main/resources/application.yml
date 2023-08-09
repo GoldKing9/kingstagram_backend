@@ -25,8 +25,8 @@ logging.level:
 cloud:
   aws:
     credentials:
-      accessKey: AKIA2CG5N4VLIEN6GMYC
-      secretKey: 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
+      accessKey: 
+      secretKey: 
     s3:
       bucket: goldking
     region:
