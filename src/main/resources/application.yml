@@ -2,12 +2,12 @@ spring:
   datasource:
     url: jdbc:h2:tcp://localhost/~/instagram
     username: sa
-    password:
+    password: 123
     driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -22,4 +22,21 @@ logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
 
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA2CG5N4VLIEN6GMYC
+      secretKey: 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
+    s3:
+      bucket: goldking
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

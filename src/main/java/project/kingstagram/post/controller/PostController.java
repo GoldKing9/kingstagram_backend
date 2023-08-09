@@ -17,6 +17,7 @@ import project.kingstagram.post.dto.request.PostUpdateDto;
 import project.kingstagram.post.dto.response.PostOneDto;
 import project.kingstagram.post.dto.response.UserPostAllDto;
 import project.kingstagram.post.service.PostService;
+import project.kingstagram.post.service.S3Service;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,38 +31,40 @@ import java.io.IOException;
 public class PostController {
 
     private final PostService postService;
-    private final FileStore fileStore;
+//    private final FileStore fileStore;
 
-
-    @PostMapping(value = "/api/feed", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) //consumes 속성 : 사용자가 Request Body에 담는 타입 제한, 헤더에 꼭 application/json존재해야함
+    @PostMapping(value = "/api/feed") //consumes 속성 : 사용자가 Request Body에 담는 타입 제한, 헤더에 꼭 application/json존재해야함 , consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     public String createPost(@ModelAttribute PostCreateForm postCreateForm, @SessionAttribute Long userId) throws IOException {
-        System.out.println("userid : "+userId);
+
+        log.info("로그인한 사용자 : {}", userId);
+        log.info("postCreateFormltoString() : {}",postCreateForm.toString());
+        log.info("content : {}", postCreateForm.getPostContent());
+        log.info("imageUrl : {}", postCreateForm.getImageUrl());
+
         if(postCreateForm.getImageUrl().isEmpty()){
             throw new IllegalArgumentException();
         }
         if(postCreateForm.getPostContent().isEmpty()){
             throw new IllegalArgumentException();
         }
-        UploadFile uploadFile = fileStore.storeFile(postCreateForm.getImageUrl());
-            log.info("사용자가 저장한 파일 : {}", uploadFile.getUploadFileName());
-            log.info("저장한 파일 : {} ", uploadFile.getStoreFileName());
-            String StoreFileName = uploadFile.getStoreFileName();
 
-            PostDto postDto = new PostDto();
-            postDto.setPostContent(postCreateForm.getPostContent());
-            postDto.setImageUrl(StoreFileName);
-            postService.savePost(postDto);
+//        UploadFile uploadFile = fileStore.storeFile(postCreateForm.getImageUrl());
+//            log.info("사용자가 저장한 파일 : {}", uploadFile.getUploadFileName());
+//            log.info("저장한 파일 : {} ", uploadFile.getStoreFileName());
+//            String StoreFileName = uploadFile.getStoreFileName();
+            postService.savePost(postCreateForm, userId);
 
         return "ok";
     }
 
     @DeleteMapping("/api/feed/{postId}")
-    public String deletePost(@PathVariable Long postId){
+    public String deletePost(@PathVariable Long postId, @SessionAttribute Long userId){
         //게시글이 유효한지 체크?
 
-        //게시글 삭제
-        postService.deletePost(postId);
-        return "redirect:/api/feeds"; // 리다이렉트 사용 보류 - 코치님께 여쭤보기!, 결과 하록님께도 전달
+        //게시글 삭제 & s3에서 이미지도 삭제해줘야함
+        String result = postService.deletePost(postId);
+        log.info("post delete : {}", result);
+        return "result"; // 리다이렉트 사용 보류 - 코치님께 여쭤보기!, 결과 하록님께도 전달
     }
 
     @PutMapping("/api/feed")

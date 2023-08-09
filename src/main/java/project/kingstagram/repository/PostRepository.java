@@ -40,4 +40,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                     " where u.userId = :userId"
     )
     Integer findPostCountByUserId(@Param("userId") Long userId);
+
+    @Query(
+            value = "select p.imageUrl from Post p where p.postId = :postId"
+    )
+    String findImageUrlByUSerId(@Param("postId") Long postId);
 }
