@@ -13,11 +13,13 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
 //사용자가 특정 게시글을 눌렀을 때 -> 단건 조회
     @Query(
-            value = "select new project.kingstagram.post.dto.response.PostOneDto" +
-                    "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(l))" +
-                    " from Post p join p.user u" +
-                    " join Like l on l.post.postId = p.postId where p.postId = :postId" +
-                    " group by p.postId"
+        value = "select new project.kingstagram.post.dto.response.PostOneDto" +
+                "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(l) ,(select count(l.likeId) from Like l where l.post.postId=:postId and l.user.userId=u.userId ))" +
+//                "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(l))" +
+                " from Post p join p.user u" +
+                " left join Like l on l.post.postId = p.postId" +
+                " where p.postId = :postId" +
+                " group by p.postId"
     )
     PostOneDto findAllByPostId(@Param("postId") Long postId);
 

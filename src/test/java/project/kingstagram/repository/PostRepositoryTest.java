@@ -115,7 +115,7 @@ class PostRepositoryTest {
 //
 //
 
-        for(int i=1;i<=20;i++){
+        for(int i=1;i<=2;i++){
              Users users = Users.builder()
                      .userPw("123")
                      .userDescription("hello")
@@ -164,10 +164,62 @@ class PostRepositoryTest {
                      .build();
              likeRepository.save(like);
         }
-        //팔로우 관계 맺어 주기
-        for(long i=2; i<=13;i++){
-            followService.makeFriend(i,1L);
+        for(int i=3;i<=4;i++){
+            Users users = Users.builder()
+                    .userPw("123")
+                    .userDescription("hello")
+                    .userNickname("kyeong"+i)
+                    .userEmail("abc@naver.com")
+                    .build();
+
+            Post post = Post.builder()
+                    .postContent("post content"+i)
+                    .imageUrl("aaa/bbb/ccc")
+                    .user(users)
+                    .build();
+
+            usersRepository.save(users);
+            postRepository.save(post);
+
+            //같은 게시글에 같은 사용자가 3개의 댓글을 달았다 댓글수 : 3
+            Comment comment = Comment.builder()
+                    .commentContent(i+"번째 게시글의 "+i+"번째 댓글입니다")
+                    .post(post)
+                    .user(users)
+                    .build();
+            Comment comment1 = Comment.builder()
+                    .commentContent(i+"번째 게시글의 "+(i+1)+"번째 댓글입니다")
+                    .post(post)
+                    .user(users)
+                    .build();
+            Comment comment2 = Comment.builder()
+                    .commentContent(i+"번째 게시글의 "+(i+2)+"번째 댓글입니다")
+                    .post(post)
+                    .user(users)
+                    .build();
+
+            commentRepository.save(comment);
+            commentRepository.save(comment1);
+            commentRepository.save(comment2);
+
+            comment.add(post);
+            comment1.add(post);
+            comment2.add(post);
+
+            //자신이 작성한 게시글에 본인이 좋아요를 누름 좋아요 수 : 1
+            Like like = Like.builder()
+                    .post(post)
+                    .user(users)
+                    .build();
+//            likeRepository.save(like);
         }
+
+
+
+        //팔로우 관계 맺어 주기
+//        for(long i=2; i<=13;i++){
+//            followService.makeFriend(i,1L);
+//        }
 
 
 
@@ -179,8 +231,14 @@ class PostRepositoryTest {
 
         PostOneDto postOneDto = postRepository.findAllByPostId(1L);
         PostOneDto postOneDto2 = postRepository.findAllByPostId(2L);
+        PostOneDto postOneDto3 = postRepository.findAllByPostId(3L);
+        PostOneDto postOneDto4 = postRepository.findAllByPostId(4L);
+
             System.out.println(postOneDto.toString());
             System.out.println(postOneDto2.toString());
+            System.out.println(postOneDto3.toString());
+            System.out.println(postOneDto4.toString());
+
 
     }
     @Test
@@ -192,8 +250,18 @@ class PostRepositoryTest {
         for (UserPostOneDto userPostOneDto : allPostByUserId) {
             System.out.println("user1의 게시글 : "+userPostOneDto);
         }
+
+
+
     }
 
+    @Test
+    @Rollback(value = false)
+    @DisplayName("count 조회")
+    void findCount(){
+        long count = postRepository.findCount(1L, 1L);
+        System.out.println("count : "+count);
+    }
 
 
 }

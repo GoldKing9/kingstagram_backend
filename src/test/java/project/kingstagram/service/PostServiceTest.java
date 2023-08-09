@@ -11,6 +11,7 @@ import project.kingstagram.post.dto.PostDto;
 import project.kingstagram.domain.Comment;
 import project.kingstagram.domain.Post;
 import project.kingstagram.post.dto.request.PostCreateForm;
+import project.kingstagram.post.dto.request.PostUpdateDto;
 import project.kingstagram.repository.CommentRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
@@ -76,7 +77,7 @@ class PostServiceTest {
     @DisplayName("게시글 삭제")
     void deletePost(){
         long cnt = postRepository.count();
-        postService.deletePost(2L);
+        postService.deletePost(2L, 1L);
         assertThat(postRepository.count()).isEqualTo(cnt-1);
 
         //문제 : 테스트마다 id값이 바뀌어서 테스트 코드를 어떻게 해야할지 모르겠다..ㅜ
@@ -86,8 +87,11 @@ class PostServiceTest {
     @Rollback(false)
     @DisplayName("게시글 수정")
     void updatePost(){
-
-        postService.updatePost(1L, "게시글입니다2");
+        PostUpdateDto dto = PostUpdateDto.builder()
+                        .postId(1L)
+                                .postContent("게시글입니다2")
+                                        .build();
+        postService.updatePost(dto, 1L);
         Post post = postRepository.findById(1L).get();
         assertThat(post.getPostContent()).isEqualTo("게시글입니다2");
 

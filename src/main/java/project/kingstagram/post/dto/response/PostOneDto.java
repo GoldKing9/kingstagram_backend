@@ -16,10 +16,11 @@ public class PostOneDto {
      private Long userId;
      private String userNickname;
      private Long likeCount;
+     private boolean likeStatus;
 
 
     @Builder
-    public PostOneDto(Long postId, String postContent, String imageUrl, LocalDateTime postTime, Long userId, String userNickname, Long likeCount) {
+    public PostOneDto(Long postId, String postContent, String imageUrl, LocalDateTime postTime, Long userId, String userNickname, Long likeCount, long likeStatus) {
         this.postId = postId;
         this.postContent = postContent;
         this.imageUrl = imageUrl;
@@ -27,5 +28,8 @@ public class PostOneDto {
         this.userId = userId;
         this.userNickname = userNickname;
         this.likeCount = likeCount;
+        this.likeStatus = likeStatus !=0;
     }
+
+
 }

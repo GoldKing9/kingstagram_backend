@@ -59,31 +59,25 @@ public class PostController {
 
     @DeleteMapping("/api/feed/{postId}")
     public String deletePost(@PathVariable Long postId, @SessionAttribute Long userId){
-        //게시글이 유효한지 체크?
+        //게시글이 유효한지 체크? => 서비스단에서 실행
 
         //게시글 삭제 & s3에서 이미지도 삭제해줘야함
-        String result = postService.deletePost(postId);
-        log.info("post delete : {}", result);
-        return "result"; // 리다이렉트 사용 보류 - 코치님께 여쭤보기!, 결과 하록님께도 전달
+        return postService.deletePost(postId, userId);// 리다이렉트로 경로를 보내줄 경우 : 프론트가 선택할 수 있음 묵살할건지 수용할건지
     }
 
     @PutMapping("/api/feed")
-    public String updatePost(@RequestBody PostUpdateDto updateDto){
+    public String updatePost(@RequestBody PostUpdateDto updateDto, @SessionAttribute Long userId){
     
-        Long postId = updateDto.getPostId();
-        log.info("postId ={}", postId);
-        String postContent = updateDto.getPostContent();
-        log.info("postContent = {}",postContent);
-        if(postId == 0){
+        if(updateDto.getPostId()==null){
             throw new IllegalArgumentException();
         }
         if(updateDto.getPostContent().isEmpty()){
             throw new IllegalArgumentException();
         }
-
-        postService.updatePost(postId, updateDto.getPostContent());
-
-        return "update";
+        log.info("postId : {}", updateDto.getPostId());
+        log.info("post content : {}", updateDto.getPostContent());
+        log.info("userId : {}", userId);
+        return postService.updatePost(updateDto, userId);
     }
 
     //단건 조회
@@ -121,7 +115,7 @@ public class PostController {
         }
         //세션이 없을 경우 세션을 생성해준다
         HttpSession session = request.getSession(); //request에서 세션을 가져와서
-        session.setAttribute("userId", 1); //사용자 아이디를 세션에 저장하기
+        session.setAttribute("userId", 2); //사용자 아이디를 세션에 저장하기
 
         String sessionId = session.getId(); //JSESSIONID 자동 생성되는 세션id(JSESSIONID)
         log.info("sessionId={}", sessionId);
