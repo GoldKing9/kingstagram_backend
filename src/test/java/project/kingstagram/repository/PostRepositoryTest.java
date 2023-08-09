@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
@@ -115,7 +116,7 @@ class PostRepositoryTest {
 //
 //
 
-        for(int i=1;i<=2;i++){
+        for(int i=1;i<=12;i++){
              Users users = Users.builder()
                      .userPw("123")
                      .userDescription("hello")
@@ -162,64 +163,16 @@ class PostRepositoryTest {
                      .post(post)
                      .user(users)
                      .build();
-             likeRepository.save(like);
+//             likeRepository.save(like);
         }
-        for(int i=3;i<=4;i++){
-            Users users = Users.builder()
-                    .userPw("123")
-                    .userDescription("hello")
-                    .userNickname("kyeong"+i)
-                    .userEmail("abc@naver.com")
-                    .build();
 
-            Post post = Post.builder()
-                    .postContent("post content"+i)
-                    .imageUrl("aaa/bbb/ccc")
-                    .user(users)
-                    .build();
-
-            usersRepository.save(users);
-            postRepository.save(post);
-
-            //같은 게시글에 같은 사용자가 3개의 댓글을 달았다 댓글수 : 3
-            Comment comment = Comment.builder()
-                    .commentContent(i+"번째 게시글의 "+i+"번째 댓글입니다")
-                    .post(post)
-                    .user(users)
-                    .build();
-            Comment comment1 = Comment.builder()
-                    .commentContent(i+"번째 게시글의 "+(i+1)+"번째 댓글입니다")
-                    .post(post)
-                    .user(users)
-                    .build();
-            Comment comment2 = Comment.builder()
-                    .commentContent(i+"번째 게시글의 "+(i+2)+"번째 댓글입니다")
-                    .post(post)
-                    .user(users)
-                    .build();
-
-            commentRepository.save(comment);
-            commentRepository.save(comment1);
-            commentRepository.save(comment2);
-
-            comment.add(post);
-            comment1.add(post);
-            comment2.add(post);
-
-            //자신이 작성한 게시글에 본인이 좋아요를 누름 좋아요 수 : 1
-            Like like = Like.builder()
-                    .post(post)
-                    .user(users)
-                    .build();
-//            likeRepository.save(like);
-        }
 
 
 
         //팔로우 관계 맺어 주기
-//        for(long i=2; i<=13;i++){
-//            followService.makeFriend(i,1L);
-//        }
+        for(long i=2; i<=4;i++){
+            followService.makeFriend(i,1L);
+        }
 
 
 
@@ -245,7 +198,7 @@ class PostRepositoryTest {
     @Rollback(value=false)
     @DisplayName("게시글 전체 조회(팔로우하는 사람과 나의 게시글)")
     void findAllPostByUserId(){ //좋아요 개수에 distinct를 해주는 이유 : 조인시 댓글의 수만큼 중복 발생
-        Pageable pageable = PageRequest.of(0,10);
+        Pageable pageable = PageRequest.of(0,2);
         List<UserPostOneDto> allPostByUserId = postRepository.findAllPostByUserId(1L, pageable);
         for (UserPostOneDto userPostOneDto : allPostByUserId) {
             System.out.println("user1의 게시글 : "+userPostOneDto);
@@ -255,13 +208,8 @@ class PostRepositoryTest {
 
     }
 
-    @Test
-    @Rollback(value = false)
-    @DisplayName("count 조회")
-    void findCount(){
-        long count = postRepository.findCount(1L, 1L);
-        System.out.println("count : "+count);
-    }
+
+
 
 
 }

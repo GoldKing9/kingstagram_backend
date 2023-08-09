@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 //사용자의 게시글과 사용자가 팔로우하는 사용자들의 게시글을 조회 + 사용자가 좋아요를 눌렀는지 체크하는 로직 필요
     @Query(
             value = "select new project.kingstagram.post.dto.response.UserPostOneDto" +
-                    "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(distinct l), count(c))" +
+                    "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(distinct l), count(c), (select count(l.likeId) from Like l where l.post.postId=p.postId and l.user.userId=u.userId ))" +
                     " from Post p join p.user u" +
                     " left join Comment c on c.post = p" +
                     " left join Like l on l.post = p " +
@@ -46,4 +46,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "select p.imageUrl from Post p where p.postId = :postId"
     )
     String findImageUrlByUSerId(@Param("postId") Long postId);
+
 }
