@@ -15,7 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(
         value = "select new project.kingstagram.post.dto.response.PostOneDto" +
                 "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(l) ,(select count(l.likeId) from Like l where l.post.postId=:postId and l.user.userId=u.userId ))" +
-//                "(p.postId, p.postContent, p.imageUrl, p.postTime, u.userId, u.userNickname, count(l))" +
                 " from Post p join p.user u" +
                 " left join Like l on l.post.postId = p.postId" +
                 " where p.postId = :postId" +
