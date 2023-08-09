@@ -1,4 +1,4 @@
-package project.kingstagram.user.dto.response;
+package project.kingstagram.user.dto.request;
 
 import lombok.Data;
 

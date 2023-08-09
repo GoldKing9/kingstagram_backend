@@ -2,7 +2,6 @@ package project.kingstagram.post.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,10 +10,9 @@ import project.kingstagram.domain.Post;
 import project.kingstagram.post.dto.response.PostOneDto;
 import project.kingstagram.post.dto.response.UserPostAllDto;
 import project.kingstagram.post.dto.response.UserPostOneDto;
-import project.kingstagram.repository.CommentRepository;
-import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;
-import project.kingstagram.user.dto.response.ToUserDto;
+import project.kingstagram.user.dto.UserProfilePostDTO;
+import project.kingstagram.user.dto.response.PostIdAndImageUrlDTO;
 
 import java.util.List;
 
@@ -55,6 +53,18 @@ public class PostService{
             return UserPostAllDto.builder()
                     .posts(allPostByUserId)
                     .build();
+
+    }
+
+    // 프로필 페이지 게시글
+    @Transactional(readOnly = true)
+    public UserProfilePostDTO getMyPost(Long userId, Pageable pageable) {
+        UserProfilePostDTO output = new UserProfilePostDTO();
+        List<PostIdAndImageUrlDTO> myPostByUserId = postRepository.findMyPostByUserId(userId, pageable);
+
+        output.setTotalPages((int) Math.ceil(((double)postRepository.findCountPostByUserId(userId)/pageable.getPageSize())));
+        output.setPostIdAndImageUrlDTOList(myPostByUserId);
+        return output;
 
     }
 }

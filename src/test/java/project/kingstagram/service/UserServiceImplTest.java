@@ -3,7 +3,7 @@ package project.kingstagram.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.kingstagram.user.dto.response.UserDTO;
+import project.kingstagram.user.dto.request.UserDTO;
 import project.kingstagram.user.dto.response.UserProfileDTO;
 import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;

@@ -1,7 +1,7 @@
 package project.kingstagram.user.service;
 
 import org.springframework.stereotype.Service;
-import project.kingstagram.user.dto.response.UserDTO;
+import project.kingstagram.user.dto.request.UserDTO;
 import project.kingstagram.user.dto.response.UserProfileDTO;
 import project.kingstagram.user.dto.response.UserSignUpDTO;
 import project.kingstagram.domain.Users;
@@ -25,8 +25,9 @@ public class UserServiceImpl implements UserService {
         this.followRepository = followRepository;
     }
 
+    // 프로필 편집
     @Override
-    public void setUserProfile(UserProfileDTO userProfile) { // 프로필 편집
+    public void setUserProfile(UserProfileDTO userProfile) {
         Users userInfo = usersRepository.findById(userProfile.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("entity not found"));
 
@@ -35,14 +36,15 @@ public class UserServiceImpl implements UserService {
         usersRepository.save(userInfo);
     }
 
+    // 프로필 조회
     @Override
-    public UserProfileDTO getUserProfile(Long userId) { // 프로필 조회
+    public UserProfileDTO getUserProfile(Long userId) {
         Users userInfo = usersRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("entity not found"));
 
-        Integer postCountByUserId = postRepository.findPostCountByUserId(userId);
-        Integer followingCountByUserId = followRepository.findFollowingCountByUserId(userId);
-        Integer followerCountByUserId = followRepository.findFollowerCountByUserId(userId);
+        Long postCountByUserId = postRepository.findPostCountByUserId(userId);
+        Long followingCountByUserId = followRepository.findFollowingCountByUserId(userId);
+        Long followerCountByUserId = followRepository.findFollowerCountByUserId(userId);
 
 
         UserProfileDTO output = new UserProfileDTO();
@@ -58,8 +60,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    // 회원가입 정보 DB에 저장
     @Override
-    public UserSignUpDTO setUser(UserDTO user) { // 회원가입 정보 DB에 저장
+    public UserSignUpDTO setUser(UserDTO user) {
         Users userInfo = new Users();
         UserSignUpDTO output = new UserSignUpDTO();
 
@@ -79,8 +82,9 @@ public class UserServiceImpl implements UserService {
         return output;
     }
 
+    // DB에서 이메일, 비번 조회해서 유효한 로그인인지 검증
     @Override
-    public Long login(String userEmail, String userPw) { // DB에서 이메일, 비번 조회해서 유효한 로그인인지 검증
+    public Long login(String userEmail, String userPw) {
         List<Users> validateUserEmailAndUserPw = usersRepository.findByUserEmailAndUserPw(userEmail, userPw);
 
         if(validateUserEmailAndUserPw.size() == 0) {

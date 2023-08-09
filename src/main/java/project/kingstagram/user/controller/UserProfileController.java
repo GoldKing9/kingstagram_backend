@@ -1,20 +1,27 @@
 package project.kingstagram.user.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import project.kingstagram.post.service.PostService;
+import project.kingstagram.user.dto.response.PostIdAndImageUrlDTO;
 import project.kingstagram.user.dto.response.SetProfileDTO;
 import project.kingstagram.user.dto.response.UserProfileDTO;
+import project.kingstagram.user.dto.UserProfilePostDTO;
 import project.kingstagram.user.service.SessionService;
 import project.kingstagram.user.service.UserService;
+
+import java.util.List;
 
 @RestController
 @Slf4j
 public class UserProfileController {
-
+    private final PostService postService;
     private final UserService userService;
     private final SessionService sessionService;
 
-    public UserProfileController(UserService userService, SessionService sessionService) {
+    public UserProfileController(PostService postService, UserService userService, SessionService sessionService) {
+        this.postService = postService;
         this.userService = userService;
         this.sessionService = sessionService;
     }
@@ -27,21 +34,9 @@ public class UserProfileController {
     @GetMapping("/api/user/profile")
     public UserProfileDTO showUserProfile(@SessionAttribute Long userId) {
 
-        UserProfileDTO output = new UserProfileDTO();
-
-        //uuid가 실제로 세션 해시맵에 존재하는지 판단
-        //세션이 없으면 에러라고 코드 -1 리턴
-        if(userId == -1){
-            output.setResponseCode(-1);
-            return output;
-        }
-//        ---- 이거 다시 짜야 됨!! uuid 안 쓰기로 했는데 관련된 거 다 바꿔야 되겠다..
-
-        // 있으면(세션이 유효하면) 조회 후 리턴
-        // uuid에 해당하는 userId를 조회해서 가져옴
-        UserProfileDTO res = userService.getUserProfile(userId);
-        res.setResponseCode(1);
-        return res;
+        UserProfileDTO output = userService.getUserProfile(userId);
+        output.setResponseCode(1);
+        return output;
 //        output.setUserId(res.getUserId());
 //        output.setUserName(res.getUserName());
 //        output.setUserNickname(res.getUserNickname());
@@ -53,8 +48,17 @@ public class UserProfileController {
 //        return output;
     }
 
+    // 프로필 게시글 조회
+    @GetMapping("/api/user/userProfilePost")
+    public UserProfilePostDTO showUserProfilePost(@SessionAttribute Long userId, Pageable pageable) {
+
+        UserProfilePostDTO output = postService.getMyPost(userId, pageable);
+
+        return output;
+    }
+
     // 프로필 편집 -> 제출
-    @PutMapping("/api/user/edit/")
+    @PutMapping("/api/user/edit")
     public SetProfileDTO editUserProfile(@SessionAttribute Long userId , @RequestBody SetProfileDTO userDescription) {
 
         log.info(userDescription.getUserDescription());

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import project.kingstagram.domain.Post;
 import project.kingstagram.post.dto.response.PostOneDto;
 import project.kingstagram.post.dto.response.UserPostOneDto;
+import project.kingstagram.user.dto.response.PostIdAndImageUrlDTO;
 
 import java.util.List;
 
@@ -39,5 +40,23 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "select count(1) from Post p join p.user u" +
                     " where u.userId = :userId"
     )
-    Integer findPostCountByUserId(@Param("userId") Long userId);
+    Long findPostCountByUserId(@Param("userId") Long userId);
+
+
+// 프로필 페이지 게시글 조회
+    @Query(
+            value = "select new project.kingstagram.user.dto.response.PostIdAndImageUrlDTO(p.postId, p.imageUrl)" +
+                    "from Post p join p.user u" +
+                    " where u.userId = :userId "
+
+    )
+    List<PostIdAndImageUrlDTO> findMyPostByUserId(@Param("userId") Long userId, Pageable pageable);
+    @Query(
+            value = "select count(1)" +
+                    "from Post p join p.user u" +
+                    " where u.userId = :userId "
+
+    )
+    Integer findCountPostByUserId(@Param("userId") Long userId);
+
 }
