@@ -24,7 +24,7 @@ public class UserController {
     }
 
     private boolean validateEmail(String email) {
-        String emailPattern = "^[a-zA-Z0-9!@#$%^&*]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$";
+        String emailPattern = "^[a-z0-9!@#$%^&*]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailPattern);
     }
     private boolean validateNickname(String nickname) {
