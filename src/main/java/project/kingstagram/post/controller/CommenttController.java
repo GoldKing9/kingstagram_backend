@@ -15,16 +15,17 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CommentController {
+public class CommenttController {
     private final CommentService commentService;
 
-    @GetMapping("api/comment/{postId}")
+    @GetMapping("/api/comment/{postId}")
     public List<CommentInfo> getComments(@PathVariable Long postId) {
         log.info("request = {}", postId);
         return commentService.getComments(postId);
     }
     @PostMapping("/api/comment")
     public String createComment(@RequestBody CreateCommentRequest createCommentRequest, @SessionAttribute Long userId) {
+        log.info("request = {}", createCommentRequest);
         commentService.createComment(createCommentRequest,userId);
         return "Success";
     }
