@@ -24,11 +24,11 @@ public class UserController {
     }
 
     private boolean validateEmail(String email) {
-        String emailPattern = "^[a-zA-Z0-9!@#$%^&*]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$";
+        String emailPattern = "^[a-z0-9!@#$%^&*]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailPattern);
     }
     private boolean validateNickname(String nickname) {
-        String nicknamePattern = "^[a-z0-9!@#$%^&*]+$";
+        String nicknamePattern = "^[a-z0-9_]+$";
         return !nickname.contains(" ") && nickname.matches(nicknamePattern);
     }
     private boolean validateName(String name) {
@@ -42,6 +42,11 @@ public class UserController {
     // 회원가입
     @PostMapping("/api/signup")
     public UserSignUpDTO signup(@RequestBody UserDTO user) {
+
+        UserSignUpDTO validateDupl = userService.validateDuplicated(user);
+        if (validateDupl.getResponseCode() == -1 || validateDupl.getResponseMessage() != null) {
+            return validateDupl;
+        }
 
         UserSignUpDTO output = new UserSignUpDTO();
 

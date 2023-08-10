@@ -82,12 +82,32 @@ public class UserServiceImpl implements UserService {
         return output;
     }
 
+    @Override
+    public UserSignUpDTO validateDuplicated(UserDTO user) {
+
+        UserSignUpDTO output = new UserSignUpDTO();
+
+        try {
+            if (usersRepository.findByUserEmail(user.getUserEmail()).isPresent()) {
+                throw new IllegalStateException("이미 존재하는 이메일입니다.");
+            }
+            if (usersRepository.findByUserNickname(user.getUserNickname()).isPresent()) {
+                throw new IllegalStateException("이미 존재하는 닉네임입니다.");
+            }
+        } catch (IllegalStateException e) {
+            output.setResponseCode(-1);
+            output.setResponseMessage(e.getMessage());
+            return output;
+        }
+       return output;
+    }
+
     // DB에서 이메일, 비번 조회해서 유효한 로그인인지 검증
     @Override
     public Long login(String userEmail, String userPw) {
         List<Users> validateUserEmailAndUserPw = usersRepository.findByUserEmailAndUserPw(userEmail, userPw);
 
-        if(validateUserEmailAndUserPw.size() == 0) {
+        if (validateUserEmailAndUserPw.size() == 0) {
             return -1L;
         }
         return validateUserEmailAndUserPw.get(0).getUserId();
