@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
@@ -115,7 +116,7 @@ class PostRepositoryTest {
 //
 //
 
-        for(int i=1;i<=20;i++){
+        for(int i=1;i<=12;i++){
              Users users = Users.builder()
                      .userPw("123")
                      .userDescription("hello")
@@ -162,10 +163,14 @@ class PostRepositoryTest {
                      .post(post)
                      .user(users)
                      .build();
-             likeRepository.save(like);
+//             likeRepository.save(like);
         }
+
+
+
+
         //팔로우 관계 맺어 주기
-        for(long i=2; i<=13;i++){
+        for(long i=2; i<=4;i++){
             followService.makeFriend(i,1L);
         }
 
@@ -179,20 +184,31 @@ class PostRepositoryTest {
 
         PostOneDto postOneDto = postRepository.findAllByPostId(1L);
         PostOneDto postOneDto2 = postRepository.findAllByPostId(2L);
+        PostOneDto postOneDto3 = postRepository.findAllByPostId(3L);
+        PostOneDto postOneDto4 = postRepository.findAllByPostId(4L);
+
             System.out.println(postOneDto.toString());
             System.out.println(postOneDto2.toString());
+            System.out.println(postOneDto3.toString());
+            System.out.println(postOneDto4.toString());
+
 
     }
     @Test
     @Rollback(value=false)
     @DisplayName("게시글 전체 조회(팔로우하는 사람과 나의 게시글)")
     void findAllPostByUserId(){ //좋아요 개수에 distinct를 해주는 이유 : 조인시 댓글의 수만큼 중복 발생
-        Pageable pageable = PageRequest.of(0,10);
+        Pageable pageable = PageRequest.of(0,2);
         List<UserPostOneDto> allPostByUserId = postRepository.findAllPostByUserId(1L, pageable);
         for (UserPostOneDto userPostOneDto : allPostByUserId) {
             System.out.println("user1의 게시글 : "+userPostOneDto);
         }
+
+
+
     }
+
+
 
 
 

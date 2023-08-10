@@ -1,17 +1,20 @@
 package project.kingstagram.post.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class PostUpdateDto {
     @NotNull
     private Long postId;
     private String postContent;
+
+    @Builder
+
+    public PostUpdateDto(Long postId, String postContent) {
+        this.postId = postId;
+        this.postContent = postContent;
+    }
 }

@@ -1,9 +1,6 @@
 package project.kingstagram.post.dto.response;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -20,8 +17,10 @@ public class UserPostOneDto {
     private String userNickname;
     private Long likeCount;
     private Long commentCount;
+    private boolean likeStatus;
 
-    public UserPostOneDto(Long postId, String postContent, String imageUrl, LocalDateTime postTime, Long userId, String userNickname, Long likeCount, Long commentCount) {
+    @Builder
+    public UserPostOneDto(Long postId, String postContent, String imageUrl, LocalDateTime postTime, Long userId, String userNickname, Long likeCount, Long commentCount, long likeStatus) {
         this.postId = postId;
         this.postContent = postContent;
         this.imageUrl = imageUrl;
@@ -30,7 +29,6 @@ public class UserPostOneDto {
         this.userNickname = userNickname;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
+        this.likeStatus = likeStatus !=0;
     }
-
-
 }
