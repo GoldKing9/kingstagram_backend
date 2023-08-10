@@ -1,6 +1,8 @@
 package project.kingstagram.user.dto.request;
 
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
+
 
 @Data
 public class UserDTO {

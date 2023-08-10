@@ -22,7 +22,7 @@ public class LikeController {
         return likeService.likesCount(postId);
     }
 
-    @DeleteMapping("/api/{postId}/unlike")
+    @DeleteMapping("/api/{postId}/like")
     public CountLikeDto unlikePost(@PathVariable Long postId, @SessionAttribute Long userId) {
         likeService.unLikes(postId, userId);
         return likeService.likesCount(postId);

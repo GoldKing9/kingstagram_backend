@@ -24,10 +24,19 @@ public class UserController {
     }
 
     private boolean validateEmail(String email) {
+<<<<<<< Updated upstream
         String emailPattern = "^[a-z0-9!@#$%^&*]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailPattern);
     }
     private boolean validateNickname(String nickname) {
+=======
+        String emailPattern = "^[a-zA-Z0-9!@#$%^&*]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$";
+        //이메일 중복검증
+        return email.matches(emailPattern);
+    }
+    private boolean validateNickname(String nickname) {
+        //닉네임 중복 검증
+>>>>>>> Stashed changes
         String nicknamePattern = "^[a-z0-9_]+$";
         return !nickname.contains(" ") && nickname.matches(nicknamePattern);
     }
@@ -143,6 +152,7 @@ public class UserController {
         HttpSession httpSession =  httpServletRequest.getSession();
         httpSession.removeAttribute("userId"); // removeAttribute() 메서드 쓰려고 @SessionAttribute 말고
         output.setResponseCode(1);
+        output.setResponseMessage("logout ok");
         return output;
     }
 

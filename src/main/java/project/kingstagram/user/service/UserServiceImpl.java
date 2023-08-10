@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setUserNickname(user.getUserNickname());
         userInfo.setUserName(user.getUserName());
         userInfo.setUserPw(user.getUserPw());
-
+        
         try {
             usersRepository.save(userInfo);
         } catch (Exception e) {
@@ -79,6 +79,7 @@ public class UserServiceImpl implements UserService {
         }
 
         output.setResponseCode(1);
+        output.setResponseMessage("ok");
         return output;
     }
 

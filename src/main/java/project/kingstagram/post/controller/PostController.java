@@ -34,7 +34,7 @@ public class PostController {
 //    private final FileStore fileStore;
 
     @PostMapping(value = "/api/feed") //consumes 속성 : 사용자가 Request Body에 담는 타입 제한, 헤더에 꼭 application/json존재해야함 , consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    public String createPost(@ModelAttribute PostCreateForm postCreateForm, @SessionAttribute Long userId) throws IOException {
+    public HttpStatus createPost(@ModelAttribute PostCreateForm postCreateForm, @SessionAttribute Long userId) throws IOException {
 
         log.info("로그인한 사용자 : {}", userId);
         log.info("postCreateFormltoString() : {}",postCreateForm.toString());
@@ -42,10 +42,10 @@ public class PostController {
         log.info("imageUrl : {}", postCreateForm.getImageUrl());
 
         if(postCreateForm.getImageUrl().isEmpty()){
-            throw new IllegalArgumentException();
+            return HttpStatus.BAD_REQUEST;
         }
         if(postCreateForm.getPostContent().isEmpty()){
-            throw new IllegalArgumentException();
+            return HttpStatus.BAD_REQUEST;
         }
 
 //        UploadFile uploadFile = fileStore.storeFile(postCreateForm.getImageUrl());
@@ -54,7 +54,7 @@ public class PostController {
 //            String StoreFileName = uploadFile.getStoreFileName();
             postService.savePost(postCreateForm, userId);
 
-        return "ok";
+        return HttpStatus.CREATED;
     }
 
     @DeleteMapping("/api/feed/{postId}")
