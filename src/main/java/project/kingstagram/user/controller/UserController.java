@@ -2,7 +2,7 @@ package project.kingstagram.user.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import project.kingstagram.user.dto.response.UserDTO;
+import project.kingstagram.user.dto.request.UserDTO;
 import project.kingstagram.user.dto.response.UserLogInOutDTO;
 import project.kingstagram.user.dto.response.UserSignUpDTO;
 import project.kingstagram.user.service.SessionService;
@@ -131,12 +131,12 @@ public class UserController {
     }
 
     // 로그아웃
-    @PostMapping("api/logout/{uuid}")
+    @PostMapping("api/logout")
     public UserLogInOutDTO logout(HttpServletRequest httpServletRequest) {
 
         UserLogInOutDTO output = new UserLogInOutDTO();
         HttpSession httpSession =  httpServletRequest.getSession();
-        httpSession.removeAttribute("userId");
+        httpSession.removeAttribute("userId"); // removeAttribute() 메서드 쓰려고 @SessionAttribute 말고
         output.setResponseCode(1);
         return output;
     }

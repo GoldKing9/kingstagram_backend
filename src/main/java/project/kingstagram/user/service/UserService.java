@@ -1,7 +1,7 @@
 package project.kingstagram.user.service;
 
 import org.springframework.stereotype.Service;
-import project.kingstagram.user.dto.response.UserDTO;
+import project.kingstagram.user.dto.request.UserDTO;
 import project.kingstagram.user.dto.response.UserProfileDTO;
 import project.kingstagram.user.dto.response.UserSignUpDTO;
 
