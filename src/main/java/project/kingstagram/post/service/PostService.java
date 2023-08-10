@@ -54,7 +54,7 @@ public class PostService{
 
         //사용자가 작성한 게시물인가
         if(post.getUser().getUserId().equals(userId)){
-            String imagePath = postRepository.findImageUrlByUSerId(postId);
+            String imagePath = postRepository.findImageUrlByUserId(postId);
             log.info("post service imagePath : {}", imagePath);
             String imageKeyName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
             log.info("post service imageKeyName : {}", imageKeyName);
