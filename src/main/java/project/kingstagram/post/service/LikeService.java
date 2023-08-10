@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.kingstagram.domain.Like;
 import project.kingstagram.domain.Post;
 import project.kingstagram.domain.Users;
+import project.kingstagram.post.dto.response.CountLikeDto;
 import project.kingstagram.repository.LikeRepository;
 import project.kingstagram.repository.PostRepository;
 import project.kingstagram.repository.UsersRepository;
@@ -33,7 +34,7 @@ public class LikeService {
     public void unLikes(Long postId, Long userId){
         likeRepository.deleteLike(postId,userId);
     }
-    public Long likesCount(Long postId){
-        return likeRepository.likeCount(postId);
+    public CountLikeDto likesCount(Long postId){
+        return new CountLikeDto(likeRepository.likeCount(postId));
     }
 }

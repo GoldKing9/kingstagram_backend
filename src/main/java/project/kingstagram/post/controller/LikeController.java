@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.kingstagram.post.dto.response.CountLikeDto;
 import project.kingstagram.post.service.LikeService;
 import javax.servlet.http.HttpSession;
 
@@ -15,15 +16,15 @@ import javax.servlet.http.HttpSession;
 public class LikeController {
     private final LikeService likeService;
 
-    @PostMapping("/api/{postId}like")
-    public String likePost(@PathVariable Long postId, @SessionAttribute Long userId) {
+    @PostMapping("/api/{postId}/like")
+    public CountLikeDto likePost(@PathVariable Long postId, @SessionAttribute Long userId) {
         likeService.likes(postId, userId);
-        return "like";
+        return likeService.likesCount(postId);
     }
 
-    @DeleteMapping("/api/{postId}unlike")
-    public String unlikePost(@PathVariable Long postId, @SessionAttribute Long userId) {
+    @DeleteMapping("/api/{postId}/unlike")
+    public CountLikeDto unlikePost(@PathVariable Long postId, @SessionAttribute Long userId) {
         likeService.unLikes(postId, userId);
-        return "delete";
+        return likeService.likesCount(postId);
     }
 }
