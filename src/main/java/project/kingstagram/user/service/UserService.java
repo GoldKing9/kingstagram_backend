@@ -13,5 +13,7 @@ public interface UserService {
 
     public UserSignUpDTO setUser(UserDTO user); // 회원가입
 
+    public UserSignUpDTO validateDuplicated(UserDTO user); // 이메일, 닉네임 중복 검증
+
     public Long login(String userEmail, String userPw); // DB에서 이메일, 비번 조회해서 유효한 로그인인지 검증
 }
