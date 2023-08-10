@@ -74,22 +74,4 @@ public class CommentServiceImpl implements CommentService{
         commentRepository.delete(comment);
     }
 
-//    @Override
-//    @Transactional
-//    public void deleteComment(Long CommentId) {
-//        commentRepository.deleteById(CommentId);
-//    }
-
-
-//    @Override
-//    public List<CommentInfo> getComments(GetCommentRequest request) {
-//        Post findPost = postRepository.findById(request.getPostId())
-//                .orElseThrow(() -> new RuntimeException("해당하는 게시글을 찾을 수 없습니다."));
-//        List<Comment> result = commentRepository.findAllByPost(findPost);
-//
-//        for (Comment comment : result) {
-//            comment.getUser().get
-//        }
-//
-//    }
 }

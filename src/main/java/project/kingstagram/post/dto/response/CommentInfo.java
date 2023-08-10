@@ -1,10 +1,12 @@
 package project.kingstagram.post.dto.response;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
+@Getter
 public class CommentInfo {
     private final Long commentId;
     private final String commentContent;

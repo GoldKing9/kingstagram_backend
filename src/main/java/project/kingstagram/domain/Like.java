@@ -2,6 +2,7 @@ package project.kingstagram.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import javax.persistence.*;
         )
     }
 )
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
     @Id
