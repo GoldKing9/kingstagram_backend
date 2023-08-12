@@ -1,7 +1,9 @@
 package project.kingstagram.user.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.kingstagram.user.dto.request.UserDTO;
+import project.kingstagram.user.dto.response.UserLogInOutDTO;
 import project.kingstagram.user.dto.response.UserProfileDTO;
 import project.kingstagram.user.dto.response.UserSignUpDTO;
 import project.kingstagram.domain.Users;
@@ -13,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
@@ -83,6 +86,7 @@ public class UserServiceImpl implements UserService {
         return output;
     }
 
+    // 회원가입 시 이메일, 닉네임 중복 검증
     @Override
     public UserSignUpDTO validateDuplicated(UserDTO user) {
 
@@ -105,13 +109,28 @@ public class UserServiceImpl implements UserService {
 
     // DB에서 이메일, 비번 조회해서 유효한 로그인인지 검증
     @Override
-    public Long login(String userEmail, String userPw) {
+    public UserLogInOutDTO login(String userEmail, String userPw) {
         List<Users> validateUserEmailAndUserPw = usersRepository.findByUserEmailAndUserPw(userEmail, userPw);
+        UserLogInOutDTO output = new UserLogInOutDTO();
 
+        log.info("userEmail={}", userEmail);
+        log.info("userPw={}", userPw);
+
+        // 로그인 실패
         if (validateUserEmailAndUserPw.size() == 0) {
-            return -1L;
+            output.setResponseCode(-1);
+            output.setResponseMessage("로그인 실패");
+            return output;
         }
-        return validateUserEmailAndUserPw.get(0).getUserId();
+
+        // 로그인 성공
+        Users res = validateUserEmailAndUserPw.get(0);
+        output.setUserId(res.getUserId());
+        output.setUserName(res.getUserName());
+        output.setUserNickname(res.getUserNickname());
+        output.setResponseCode(1);
+        output.setResponseMessage("로그인 성공");
+        return output;
     }
     // 왜 List를 사용하지? => 방어 로직! 혹시 이메일이 중복으로 들어가는 경우가 있으면 count가 2인 리스트로는 받을 수 있는데 그냥 Users 객체로 받으려고 하면 에러 남
     // 에러 처리를 다 해 줄 거면 상관 없는데 안 할 거니까 list로 구현하는 게 나을 듯 해서 List 사용

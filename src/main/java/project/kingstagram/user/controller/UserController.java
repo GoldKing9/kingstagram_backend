@@ -24,21 +24,19 @@ public class UserController {
     }
 
     private boolean validateEmail(String email) {
-        String emailPattern = "^[a-z0-9!@#$%^&*]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
-        //이메일 중복검증
+        String emailPattern = "^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$";
         return email.matches(emailPattern);
     }
     private boolean validateNickname(String nickname) {
-        //닉네임 중복 검증
-
-        String nicknamePattern = "^[a-z0-9_]+$";
+        String nicknamePattern = "^(?=.*[a-z])(?=.*[_0-9]?)(?=.{4,16}$).*";
         return !nickname.contains(" ") && nickname.matches(nicknamePattern);
     }
     private boolean validateName(String name) {
-        return !name.contains(" ") && name.length() <= 16;
+        String namePattern = "^(?!(?:[ㄱ-ㅎㅏ-ㅣ]+|[aeiouAEIOU]+)$)[가-힣]{2,5}$";
+        return !name.contains(" ") && name.matches(namePattern);
     }
     private boolean validatePw(String pw) {
-        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,16}$";
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*[\\]{}<>,.\\\\/_=+()]).{8,16}$";
         return !pw.contains(" ") && pw.matches(passwordPattern);
     }
 
@@ -46,6 +44,7 @@ public class UserController {
     @PostMapping("/api/signup")
     public UserSignUpDTO signup(@RequestBody UserDTO user) {
 
+        // 이메일, 비번 중복 검증
         UserSignUpDTO validateDupl = userService.validateDuplicated(user);
         if (validateDupl.getResponseCode() == -1 || validateDupl.getResponseMessage() != null) {
             return validateDupl;
@@ -104,6 +103,7 @@ public class UserController {
         log.info(jSessionId);
         log.info(user.getUserEmail());
         log.info(user.getUserPw());
+
         UserLogInOutDTO output = new UserLogInOutDTO();
 
 
@@ -119,23 +119,21 @@ public class UserController {
             return output;
         }
 
+        UserLogInOutDTO res = userService.login(user.getUserEmail(),user.getUserPw());
+
         // 로그인 실패
-        Long userId = userService.login(user.getUserEmail(),user.getUserPw());
-        if(userId == -1) {
+        if(res.getResponseCode() == -1) {
             output.setResponseCode(-1);
-            output.setResponseMessage("아이디 또는 비번이 잘못됨");
+            output.setResponseMessage("이메일 또는 비번이 잘못됨");
             return output;
         }
 
-        // DB에서 아이디 비번 조회 후 세션 생성
+        // 로그인 성공 (DB에서 아이디 비번 조회 후 세션 생성)
         HttpSession httpSession =  httpServletRequest.getSession();
-        httpSession.setAttribute("userId" , userId);
+        httpSession.setAttribute("userId" , res.getUserId());
         log.info(httpSession.getId());
 
-        output.setResponseCode(1);
-        output.setResponseMessage("로그인 성공");
-
-        return output;
+        return res;
     }
 
     // 로그아웃

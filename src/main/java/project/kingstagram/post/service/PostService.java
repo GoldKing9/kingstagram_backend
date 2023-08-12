@@ -100,11 +100,11 @@ public class PostService{
 
     // 프로필 페이지 게시글
     @Transactional(readOnly = true)
-    public UserProfilePostDTO getMyPost(Long userId, Pageable pageable) {
+    public UserProfilePostDTO getMyPost(Long targetUserId, Pageable pageable) {
         UserProfilePostDTO output = new UserProfilePostDTO();
-        List<PostIdAndImageUrlDTO> myPostByUserId = postRepository.findMyPostByUserId(userId, pageable);
+        List<PostIdAndImageUrlDTO> myPostByUserId = postRepository.findMyPostByUserId(targetUserId, pageable);
 
-        output.setTotalPages((int) Math.ceil(((double)postRepository.findCountPostByUserId(userId)/pageable.getPageSize())));
+        output.setTotalPages((int) Math.ceil(((double)postRepository.findCountPostByUserId(targetUserId)/pageable.getPageSize())));
         output.setPostIdAndImageUrlDTOList(myPostByUserId);
         return output;
 

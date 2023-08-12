@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import project.kingstagram.user.dto.request.UserDTO;
+import project.kingstagram.user.dto.response.UserLogInOutDTO;
 import project.kingstagram.user.dto.response.UserProfileDTO;
 import project.kingstagram.repository.FollowRepository;
 import project.kingstagram.repository.PostRepository;
@@ -48,12 +49,12 @@ class UserServiceImplTest {
 
     @Test
     void login_성공() {
-        Long Jisoo = userService.login("dooooh2@naver.com", "Rlawltn123");
+        UserLogInOutDTO Jisoo = userService.login("dooooh2@naver.com", "Rlawltn123");
         assertThat(Jisoo).isEqualTo(125L);
     }
     @Test
     void login_실패() {
-        Long Jisoo = userService.login("dooooh2@naver.com", "rlawltn123");
+        UserLogInOutDTO Jisoo = userService.login("dooooh2@naver.com", "rlawltn123");
         assertThat(Jisoo).isNotEqualTo(125L);
     }
 }

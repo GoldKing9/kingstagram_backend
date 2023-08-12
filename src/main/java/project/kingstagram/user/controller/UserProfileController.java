@@ -31,10 +31,10 @@ public class UserProfileController {
     }
 
     // 프로필 조회
-    @GetMapping("/api/user/profile")
-    public UserProfileDTO showUserProfile(@SessionAttribute Long userId) {
+    @GetMapping("/api/user/{targetUserId}")
+    public UserProfileDTO showUserProfile(@SessionAttribute Long userId, @PathVariable Long targetUserId) {
 
-        UserProfileDTO output = userService.getUserProfile(userId);
+        UserProfileDTO output = userService.getUserProfile(targetUserId);
         output.setResponseCode(1);
         return output;
 //        output.setUserId(res.getUserId());
@@ -49,10 +49,10 @@ public class UserProfileController {
     }
 
     // 프로필 게시글 조회
-    @GetMapping("/api/user/userProfilePost")
-    public UserProfilePostDTO showUserProfilePost(@SessionAttribute Long userId, Pageable pageable) {
+    @GetMapping("/api/user/userProfilePost/{targetUserId}")
+    public UserProfilePostDTO showUserProfilePost(@SessionAttribute Long userId, @PathVariable Long targetUserId, Pageable pageable) {
 
-        UserProfilePostDTO output = postService.getMyPost(userId, pageable);
+        UserProfilePostDTO output = postService.getMyPost(targetUserId, pageable);
 
         return output;
     }
