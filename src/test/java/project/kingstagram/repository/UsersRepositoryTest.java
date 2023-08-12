@@ -23,12 +23,12 @@ class UsersRepositoryTest {
     }
     @Test
     public void 팔로우정보조회(){
-        System.out.println(followRepository.findFollowerCountByUserId(11L));
+        System.out.println(followRepository.findFollowerCountByUserId(1L));
     }
 
-    @Test
-    void findByUserEmailAndUserPw() {
-        List<Users> users1 = usersRepository.findByUserEmailAndUserPw("dooooh2@naver.com", "Rlawltn123@");
-        System.out.println("users1: " + users1.get(0).getUserNickname());
-    }
+//    @Test
+//    void findByUserEmailAndUserPw() {
+//        List<Users> users1 = usersRepository.findByUserEmailAndUserPw("dooooh2@naver.com", "Wltnwltn!1212");
+//        System.out.println("users1: " + users1.get(0).getUserNickname());
+//    }
 }

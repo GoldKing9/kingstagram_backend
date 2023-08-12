@@ -1,5 +1,6 @@
 package project.kingstagram.user.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.kingstagram.user.dto.request.UserDTO;
 import project.kingstagram.user.dto.response.UserLogInOutDTO;
@@ -14,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
@@ -111,6 +113,9 @@ public class UserServiceImpl implements UserService {
         List<Users> validateUserEmailAndUserPw = usersRepository.findByUserEmailAndUserPw(userEmail, userPw);
         UserLogInOutDTO output = new UserLogInOutDTO();
 
+        log.info("userEmail={}", userEmail);
+        log.info("userPw={}", userPw);
+
         // 로그인 실패
         if (validateUserEmailAndUserPw.size() == 0) {
             output.setResponseCode(-1);
@@ -123,6 +128,8 @@ public class UserServiceImpl implements UserService {
         output.setUserId(res.getUserId());
         output.setUserName(res.getUserName());
         output.setUserNickname(res.getUserNickname());
+        output.setResponseCode(1);
+        output.setResponseMessage("로그인 성공");
         return output;
     }
     // 왜 List를 사용하지? => 방어 로직! 혹시 이메일이 중복으로 들어가는 경우가 있으면 count가 2인 리스트로는 받을 수 있는데 그냥 Users 객체로 받으려고 하면 에러 남
