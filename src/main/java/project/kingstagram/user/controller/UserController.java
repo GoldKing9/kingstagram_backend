@@ -98,7 +98,7 @@ public class UserController {
     }
 
     // 로그인
-    @PostMapping("api/login")
+    @PostMapping("/api/login")
     public UserLogInOutDTO login(HttpServletRequest httpServletRequest, @RequestBody UserDTO user) {
         String jSessionId = httpServletRequest.getRequestedSessionId();
         log.info(jSessionId);
