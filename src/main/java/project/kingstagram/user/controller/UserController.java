@@ -104,6 +104,7 @@ public class UserController {
         log.info(jSessionId);
         log.info(user.getUserEmail());
         log.info(user.getUserPw());
+
         UserLogInOutDTO output = new UserLogInOutDTO();
 
 
@@ -119,23 +120,21 @@ public class UserController {
             return output;
         }
 
+        UserLogInOutDTO res = userService.login(user.getUserEmail(),user.getUserPw());
+
         // 로그인 실패
-        Long userId = userService.login(user.getUserEmail(),user.getUserPw());
-        if(userId == -1) {
+        if(res.getResponseCode() == -1) {
             output.setResponseCode(-1);
             output.setResponseMessage("아이디 또는 비번이 잘못됨");
             return output;
         }
 
-        // DB에서 아이디 비번 조회 후 세션 생성
+        // 로그인 성공 (DB에서 아이디 비번 조회 후 세션 생성)
         HttpSession httpSession =  httpServletRequest.getSession();
-        httpSession.setAttribute("userId" , userId);
+        httpSession.setAttribute("userId" , res.getUserId());
         log.info(httpSession.getId());
 
-        output.setResponseCode(1);
-        output.setResponseMessage("로그인 성공");
-
-        return output;
+        return res;
     }
 
     // 로그아웃

@@ -31,7 +31,7 @@ public class UserProfileController {
     }
 
     // 프로필 조회
-    @GetMapping("/api/user/profile")
+    @GetMapping("/api/user/{userId}")
     public UserProfileDTO showUserProfile(@SessionAttribute Long userId) {
 
         UserProfileDTO output = userService.getUserProfile(userId);
