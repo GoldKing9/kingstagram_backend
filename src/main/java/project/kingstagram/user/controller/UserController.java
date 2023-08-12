@@ -36,7 +36,7 @@ public class UserController {
         return !name.contains(" ") && name.matches(namePattern);
     }
     private boolean validatePw(String pw) {
-        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*[\\]{}<>,.\\\\/_=+()]).{8,16}$";
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*\\[\\]{}<>,.\\\\/_=+()]).{8,16}$";
         return !pw.contains(" ") && pw.matches(passwordPattern);
     }
 
