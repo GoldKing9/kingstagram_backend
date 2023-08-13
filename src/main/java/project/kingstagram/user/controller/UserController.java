@@ -146,11 +146,13 @@ public class UserController {
         UserLogInOutDTO output = new UserLogInOutDTO();
         HttpSession httpSession =  httpServletRequest.getSession(false); //세션이 있으면 기존 세션 반환, 없으면 null반환
         if(httpSession != null){
-            log.info("========/api/logout====== ");
+            log.info("========/logout====== ");
             httpSession.invalidate(); //만료
             Cookie cookie = new Cookie("JSESSIONID", null);
             Cookie check_login = new Cookie("LOGINCHECK", null);
+
             cookie.setMaxAge(0);
+            cookie.setPath("/");
             response.addCookie(cookie);
 
             check_login.setMaxAge(0);

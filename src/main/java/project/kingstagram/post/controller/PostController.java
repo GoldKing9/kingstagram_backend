@@ -111,7 +111,7 @@ public class PostController {
 
 
 
-    @GetMapping("/logout")
+//    @GetMapping("/logout")
     public void logout(HttpServletRequest httpServletRequest, HttpServletResponse response) {
 
         HttpSession httpSession =  httpServletRequest.getSession(false); //세션이 있으면 기존 세션 반환, 없으면 null반환
@@ -129,7 +129,7 @@ public class PostController {
     }
 
 
-    @GetMapping("/login")
+//    @GetMapping("/login")
     public HttpStatus login(HttpServletRequest request){
         String jsessionId = request.getRequestedSessionId(); //얘가 세션임
         log.info("jsessionId : {}", jsessionId);
