@@ -18,9 +18,12 @@ import project.kingstagram.post.dto.response.PostOneDto;
 import project.kingstagram.post.dto.response.UserPostAllDto;
 import project.kingstagram.post.service.PostService;
 import project.kingstagram.post.service.S3Service;
+import project.kingstagram.user.dto.response.UserLogInOutDTO;
 
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -106,6 +109,26 @@ public class PostController {
         log.info("test userId = {}", userId);
     }
 
+
+
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse response) {
+
+        HttpSession httpSession =  httpServletRequest.getSession(false); //세션이 있으면 기존 세션 반환, 없으면 null반환
+        if(httpSession != null){
+            log.info("============logout test ============= ");
+            httpSession.invalidate(); //만료
+//            log.info("JSESSIONID 삭제됨? ={}",httpSession.getAttribute("JSESSIONID"));
+            Cookie cookie = new Cookie("JSESSIONID", null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+
+        }
+
+
+    }
+
+
     @GetMapping("/login")
     public HttpStatus login(HttpServletRequest request){
         String jsessionId = request.getRequestedSessionId(); //얘가 세션임
@@ -118,7 +141,7 @@ public class PostController {
         session.setAttribute("userId", 2); //사용자 아이디를 세션에 저장하기
 
         String sessionId = session.getId(); //JSESSIONID 자동 생성되는 세션id(JSESSIONID)
-        log.info("sessionId={}", sessionId);
+//        log.info("sessionId={}", sessionId);
         //로그인할 때 세션을 request에서 가져와서 setAttr로 만들어주고 화면을 이동할 때마다 @SessionAttribute를 사용해 읽어와 유저인증!
 
         return HttpStatus.OK;

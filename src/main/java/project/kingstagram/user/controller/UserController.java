@@ -1,27 +1,23 @@
 package project.kingstagram.user.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import project.kingstagram.user.dto.request.UserDTO;
 import project.kingstagram.user.dto.response.UserLogInOutDTO;
 import project.kingstagram.user.dto.response.UserSignUpDTO;
-import project.kingstagram.user.service.SessionService;
 import project.kingstagram.user.service.UserService;
-
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-    private final SessionService sessionService;
-
-    public UserController(UserService userService, SessionService sessionService) {
-        this.userService = userService;
-        this.sessionService = sessionService;
-    }
 
     private boolean validateEmail(String email) {
         String emailPattern = "^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$";
@@ -98,14 +94,19 @@ public class UserController {
 
     // 로그인
     @PostMapping("/api/login")
-    public UserLogInOutDTO login(HttpServletRequest httpServletRequest, @RequestBody UserDTO user) {
-        String jSessionId = httpServletRequest.getRequestedSessionId();
-        log.info(jSessionId);
+    public UserLogInOutDTO login(HttpServletRequest httpServletRequest, @RequestBody UserDTO user, HttpServletResponse response) {
+
+        HttpSession session = httpServletRequest.getSession(false);
         log.info(user.getUserEmail());
         log.info(user.getUserPw());
 
         UserLogInOutDTO output = new UserLogInOutDTO();
 
+        if(session != null){ //이미 세션이 존재하는 사용자
+            output.setResponseMessage("이미 로그인 되어있습니다");
+            output.setResponseCode(-1);
+            return output;
+        }
 
         if(!validateEmail(user.getUserEmail())){
             output.setResponseCode(-1);
@@ -132,21 +133,42 @@ public class UserController {
         HttpSession httpSession =  httpServletRequest.getSession();
         httpSession.setAttribute("userId" , res.getUserId());
         log.info(httpSession.getId());
-
+        Cookie cookie  = new Cookie("LOGINCHECK", "ok");
+        cookie.setMaxAge(-1);
+        response.addCookie(cookie);
         return res;
     }
 
     // 로그아웃
-    @PostMapping("api/logout")
-    public UserLogInOutDTO logout(HttpServletRequest httpServletRequest) {
+    @PostMapping("/api/logout")
+    public UserLogInOutDTO logout(HttpServletRequest httpServletRequest,  HttpServletResponse response) {
 
         UserLogInOutDTO output = new UserLogInOutDTO();
-        HttpSession httpSession =  httpServletRequest.getSession();
-        httpSession.removeAttribute("userId"); // removeAttribute() 메서드 쓰려고 @SessionAttribute 말고
+        HttpSession httpSession =  httpServletRequest.getSession(false); //세션이 있으면 기존 세션 반환, 없으면 null반환
+        if(httpSession != null){
+            log.info("========/api/logout====== ");
+            httpSession.invalidate(); //만료
+            Cookie cookie = new Cookie("JSESSIONID", null);
+            Cookie check_login = new Cookie("LOGINCHECK", null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+
+            check_login.setMaxAge(0);
+            response.addCookie(check_login);
+            log.info("cookie = {}", cookie.getName());
+            log.info("LOGINCHECK = {}", check_login.getName());
+
+
+        }
+
         output.setResponseCode(1);
         output.setResponseMessage("logout ok");
+
         return output;
     }
+
+
+
 
 
 }

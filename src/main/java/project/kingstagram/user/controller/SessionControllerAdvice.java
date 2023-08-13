@@ -17,7 +17,7 @@ public class SessionControllerAdvice {
     public UserLogInOutDTO BadRequestException(final ServletRequestBindingException ex) {
         log.warn("error", ex);
         UserLogInOutDTO out = new UserLogInOutDTO();
-        out.setResponseCode(-1);
+        out.setResponseCode(1203);
         out.setResponseMessage("세션이 만료되었습니다. 다시 로그인 해주세요");
         return out;
     }
